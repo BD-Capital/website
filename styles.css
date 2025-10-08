@@ -1,0 +1,238 @@
+/* === Farben & Schrift === */
+:root {
+  --primary-color: #14213d;
+  --primary-light: #1b365d;
+  --background-light: #f9f9f9;
+  --text-dark: #222;
+  --side-padding: 3%; /* Weniger Padding für linksbündige Ausrichtung */
+}
+
+/* Schriftart */
+@font-face {
+  font-family: "Eina03";
+  src: url("fonts/Eina03-Regular.woff2") format("woff2"),
+       url("fonts/Eina03-Regular.woff") format("woff");
+}
+
+/* === Reset === */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 80px; /* Damit Anker-Links nicht vom Header verdeckt werden */
+}
+
+body {
+  font-family: "Eina03", "Inter", Arial, sans-serif;
+  color: var(--text-dark);
+  background-color: #fff;
+  line-height: 1.6;
+}
+
+/* === Container === */
+.container {
+  width: 100%;
+  max-width: none;
+  margin: 0;
+  padding-left: var(--side-padding);
+  padding-right: var(--side-padding);
+  padding-top: 40px;
+  padding-bottom: 40px;
+}
+
+/* === Navigation === */
+.header {
+  position: fixed;
+  top: 0;
+  width: 100%;
+  background: #fff;
+  box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.nav-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 80px;
+  padding: 0 var(--side-padding);
+  overflow: hidden;
+}
+
+.logo {
+  display: flex;
+  align-items: center;
+  height: 100%;
+}
+
+.logo img {
+  height: 90px;
+  width: auto;
+  object-fit: contain;
+  display: block;
+}
+
+/* === Navigation Menü === */
+.nav ul {
+  list-style: none;
+  display: flex;
+  gap: 30px;
+}
+
+.nav a {
+  text-decoration: none;
+  color: var(--primary-color);
+  font-weight: 500;
+  font-size: 1rem;
+  position: relative;
+  padding-bottom: 5px;
+  transition: all 0.3s ease;
+}
+
+.nav a:hover::after,
+.nav a.active::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  height: 2px;
+  width: 100%;
+  background-color: var(--primary-color);
+}
+
+/* === Mobile Menü === */
+.menu-toggle {
+  display: none;
+  background: none;
+  border: none;
+  font-size: 2rem;
+  color: var(--primary-color);
+}
+
+@media (max-width: 768px) {
+  .nav {
+    position: absolute;
+    top: 80px;
+    left: 0;
+    width: 100%;
+    background: #fff;
+    flex-direction: column;
+    display: none;
+    text-align: left;
+    padding: 20px var(--side-padding);
+    box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+  }
+
+  .nav.active {
+    display: flex;
+  }
+
+  .nav ul {
+    flex-direction: column;
+    gap: 20px;
+  }
+
+  .menu-toggle {
+    display: block;
+  }
+}
+
+/* === Hero Section === */
+.hero {
+  background: linear-gradient(135deg, #14213d 0%, #1b365d 100%);
+  color: white;
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+  padding-top: 120px;
+  padding-bottom: 60px;
+}
+
+.hero-content {
+  padding-left: var(--side-padding); /* Einheitliche Einrückung */
+  padding-right: var(--side-padding);
+  text-align: left;
+}
+
+.hero h1 {
+  font-size: 2.8rem;
+  margin-bottom: 20px;
+}
+
+.hero p {
+  font-size: 1.25rem;
+  margin-bottom: 30px;
+  max-width: 700px;
+}
+
+/* === Button === */
+.btn {
+  display: inline-block;
+  background-color: #fff;
+  color: var(--primary-color);
+  padding: 12px 30px;
+  font-weight: 600;
+  text-decoration: none;
+  border-radius: 4px;
+  transition: background-color 0.3s ease;
+}
+
+.btn:hover {
+  background-color: #f0f0f0;
+}
+
+/* === Sektionen === */
+.section {
+  padding: 60px var(--side-padding);
+}
+
+.section.light {
+  background-color: var(--background-light);
+  color: var(--text-dark);
+}
+
+.section.dark {
+  background-color: var(--primary-color);
+  color: #ffffff;
+}
+
+.section h2 {
+  font-size: 2.4rem;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.section p {
+  font-size: 1.1rem;
+  max-width: 100%;
+  margin: 0 0 20px 0;
+  text-align: left;
+}
+
+/* === FAQ === */
+.faq-item {
+  margin-bottom: 20px;
+}
+
+.faq-item h3 {
+  font-size: 1.2rem;
+  margin-bottom: 10px;
+}
+
+.faq-item p {
+  font-size: 1rem;
+}
+
+/* === Footer === */
+.footer {
+  background-color: #fff;
+  color: #666;
+  text-align: left;
+  padding: 40px var(--side-padding);
+  border-top: 1px solid #e0e0e0;
+  font-size: 0.9rem;
+}
