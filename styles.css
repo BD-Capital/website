@@ -4,7 +4,7 @@
   --primary-light: #1b365d;
   --background-light: #f9f9f9;
   --text-dark: #222;
-  --side-padding: 3%; /* Weniger Padding für linksbündige Ausrichtung */
+  --side-padding: 3%;
 }
 
 /* Schriftart */
@@ -21,9 +21,17 @@
   box-sizing: border-box;
 }
 
-html {
+/* >>> Änderung: horizontales Scrollen verhindern <<< */
+html, body {
   scroll-behavior: smooth;
-  scroll-padding-top: 80px; /* Damit Anker-Links nicht vom Header verdeckt werden */
+  scroll-padding-top: 80px;
+  overflow-x: hidden;    /* >>> Änderung <<< */
+}
+
+/* >>> Änderung: Wörter korrekt umbrechen <<< */
+body, .container, .section, p {
+  word-wrap: break-word;      /* >>> Änderung <<< */
+  overflow-wrap: break-word;  /* >>> Änderung <<< */
 }
 
 body {
@@ -105,12 +113,15 @@ body {
 }
 
 /* === Mobile Menü === */
+
+/* >>> Änderung: Menü-Icon stil verbessern <<< */
 .menu-toggle {
   display: none;
   background: none;
   border: none;
   font-size: 2rem;
   color: var(--primary-color);
+  cursor: pointer;       /* >>> Änderung <<< */
 }
 
 @media (max-width: 768px) {
@@ -153,7 +164,7 @@ body {
 }
 
 .hero-content {
-  padding-left: var(--side-padding); /* Einheitliche Einrückung */
+  padding-left: var(--side-padding);
   padding-right: var(--side-padding);
   text-align: left;
 }
