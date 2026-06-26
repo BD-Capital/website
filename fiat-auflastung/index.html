@@ -4,13 +4,13 @@
   <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ramto Fiat Ducato Auflastungs-Journey</title>
+  <title>Ramto Fiat Ducato Auflastungs-Check</title>
 </head>
 <body>
 <!-- JIMDO-CODE START -->
 <!--
-  Ramto Fiat Ducato Auflastungs-Journey
-  Version: 4.0
+  Ramto Fiat Ducato Auflastungs-Check
+  Version: 5.0
   Stand: 26.06.2026
   Einbau in Jimdo: Bei der Jimdo-Block-Datei alles kopieren. Bei der Vollversion nur den Bereich zwischen JIMDO-CODE START und JIMDO-CODE ENDE kopieren.
 
@@ -18,8 +18,8 @@
   - AUFLASTUNG_DATEN: Tabellenwerte / moegliche Kombinationen
   - AUFLASTUNG_CONFIG.prices: Preise je Option
   - AUFLASTUNG_CONFIG.productUrls / wheelUrl: Links
-  - Platzhalterbilder: .rfj-image-slot und option.imageText spaeter durch echte Bilder ersetzen
-  - Version 4: UTF-8/Viewport-Fix, mobile Dropdown-Fallback-Buttons, groessere Handy-Darstellung
+  - Bilder liegen im Ordner images/ als PNG: blattfeder.png, zgg.png, va.png, ha.png, option-a.png, option-b.png, option-c.png
+  - Version 5: echte Bildpfade, kundenfreundlichere Beratungstexte, keine Tabellenhinweise im Frontend
 -->
 <div id="ramto-fiat-journey" class="rfj">
   <style>
@@ -282,6 +282,18 @@
 
     #ramto-fiat-journey .rfj-image-slot small {
       color: rgba(255, 255, 255, 0.78);
+    }
+
+
+    #ramto-fiat-journey .rfj-image-slot.rfj-has-img,
+    #ramto-fiat-journey .rfj-option-image.rfj-has-img {
+      padding: 0;
+      background: var(--rfj-white);
+    }
+
+    #ramto-fiat-journey .rfj-image-slot.rfj-has-img::before,
+    #ramto-fiat-journey .rfj-option-image.rfj-has-img::after {
+      display: none;
     }
 
     #ramto-fiat-journey .rfj-select-label {
@@ -1036,7 +1048,7 @@
     <div class="rfj-hero">
       <div class="rfj-kicker">Ramto Auflastungs-Check</div>
       <h2>Fiat Ducato Auflastung schnell prüfen</h2>
-      <p>Wählen Sie Schritt für Schritt die zugelassenen Werte aus Fahrzeugschein oder Typenschild. Der Konfigurator zeigt nur Kombinationen an, die in der hinterlegten Ramto-Tabelle vorhanden sind.</p>
+      <p>Wählen Sie Schritt für Schritt die eingetragenen Werte aus Fahrzeugschein oder Typenschild. Am Ende sehen Sie passende RAMTO-Lösungen mit möglichen neuen Achslasten und Gesamtgewichten.</p>
     </div>
 
     <div class="rfj-progress-wrap">
@@ -1051,14 +1063,12 @@
 
     <form id="rfj-form" class="rfj-form" novalidate>
       <section class="rfj-step is-active" data-step="0" data-name="Hinterachse prüfen">
-        <div class="rfj-image-slot">
-          <span>01</span>
-          <strong>Bildplatzhalter Blattfederung</strong>
-          <small>Hier später ein Foto/Schema der Hinterachse mit markierter Blattfeder einsetzen.</small>
+        <div class="rfj-image-slot rfj-has-img">
+          <img src="images/blattfeder.png" alt="Beispielbild: Blattfederung an der Hinterachse erkennen" loading="lazy">
         </div>
         <div class="rfj-question-card">
           <h3>Hat Ihr Fahrzeug eine Blattfederung an der Hinterachse?</h3>
-          <p>Diese Berechnung ist für Fiat Ducato / Citroen Jumper / Peugeot Boxer mit blattgefederter Hinterachse vorgesehen.</p>
+          <p>Die Auflastungslösungen sind für Fiat Ducato / Citroën Jumper / Peugeot Boxer mit blattgefederter Hinterachse ausgelegt. Die Blattfedern erkennen Sie an mehreren übereinanderliegenden Federblättern an der Hinterachse.</p>
           <label class="rfj-select-label" for="rfj-leaf-select">Bitte auswählen</label>
           <div class="rfj-select-wrap">
             <select id="rfj-leaf-select" class="rfj-select" aria-label="Blattfederung auswählen">
@@ -1074,33 +1084,29 @@
       </section>
 
       <section class="rfj-step" data-step="1" data-name="zGG auswählen">
-        <div class="rfj-image-slot">
-          <span>02</span>
-          <strong>Bildplatzhalter zGG</strong>
-          <small>Hier später ein Fahrzeugschein-/Typenschild-Bild einsetzen, auf dem zGG / F.1 oder F.2 markiert ist.</small>
+        <div class="rfj-image-slot rfj-has-img">
+          <img src="images/zgg.png" alt="Beispielbild: zulässiges Gesamtgewicht am Typenschild oder Fahrzeugschein finden" loading="lazy">
         </div>
         <div class="rfj-question-card">
           <h3>Welches zulässige Gesamtgewicht ist aktuell eingetragen?</h3>
-          <p>Wählen Sie das zugelassene Gesamtgewicht in kg. Es geht um den eingetragenen Wert, nicht um das aktuell gewogene Fahrzeuggewicht.</p>
+          <p>Wählen Sie das aktuell eingetragene zulässige Gesamtgewicht in kg. Sie finden den Wert im Fahrzeugschein oder auf dem Typenschild – entscheidend ist der zugelassene Wert, nicht das aktuell gewogene Gewicht.</p>
           <label class="rfj-select-label" for="rfj-zgg-select">zGG auswählen</label>
           <div class="rfj-select-wrap">
             <select id="rfj-zgg-select" class="rfj-select" aria-label="zGG auswählen"></select>
           </div>
-          <div id="rfj-zgg-help" class="rfj-select-hint">Es werden nur zGG-Werte aus der hinterlegten Tabelle angezeigt.</div>
+          <div id="rfj-zgg-help" class="rfj-select-hint">Es werden nur Werte angezeigt, die für diesen Auflastungs-Check vorgesehen sind.</div>
           <button type="button" class="rfj-button rfj-button-primary rfj-select-next" data-continue="zgg">Auswahl übernehmen</button>
           <div class="rfj-error" data-error></div>
         </div>
       </section>
 
       <section class="rfj-step" data-step="2" data-name="1-VA auswählen">
-        <div class="rfj-image-slot">
-          <span>03</span>
-          <strong>Bildplatzhalter Vorderachse</strong>
-          <small>Hier später ein Beispielbild einsetzen, auf dem „1-VA“ / Vorderachse markiert ist.</small>
+        <div class="rfj-image-slot rfj-has-img">
+          <img src="images/va.png" alt="Beispielbild: zulässige Vorderachslast 1-VA finden" loading="lazy">
         </div>
         <div class="rfj-question-card">
           <h3>Welche zulässige Traglast hat die Vorderachse?</h3>
-          <p>Wählen Sie die aktuell zugelassene Vorderachslast in kg. Auf dem Typenschild steht sie meist als <strong>1-VA</strong>, im Fahrzeugschein als Achse 1 / 8.1.</p>
+          <p>Wählen Sie die aktuell eingetragene Vorderachslast in kg. Auf dem Typenschild steht sie meist bei <strong>1-VA</strong>, im Fahrzeugschein bei Achse 1 / 8.1.</p>
           <label class="rfj-select-label" for="rfj-va-select">1-VA auswählen</label>
           <div class="rfj-select-wrap">
             <select id="rfj-va-select" class="rfj-select" aria-label="Vorderachslast auswählen"></select>
@@ -1112,14 +1118,12 @@
       </section>
 
       <section class="rfj-step" data-step="3" data-name="2-HA auswählen">
-        <div class="rfj-image-slot">
-          <span>04</span>
-          <strong>Bildplatzhalter Hinterachse</strong>
-          <small>Hier später ein Beispielbild einsetzen, auf dem „2-HA“ / Hinterachse markiert ist.</small>
+        <div class="rfj-image-slot rfj-has-img">
+          <img src="images/ha.png" alt="Beispielbild: zulässige Hinterachslast 2-HA finden" loading="lazy">
         </div>
         <div class="rfj-question-card">
           <h3>Welche zulässige Traglast hat die Hinterachse?</h3>
-          <p>Wählen Sie die aktuell zugelassene Hinterachslast in kg. Auf dem Typenschild steht sie meist als <strong>2-HA</strong>, im Fahrzeugschein als Achse 2 / 8.2.</p>
+          <p>Wählen Sie die aktuell eingetragene Hinterachslast in kg. Auf dem Typenschild steht sie meist bei <strong>2-HA</strong>, im Fahrzeugschein bei Achse 2 / 8.2.</p>
           <label class="rfj-select-label" for="rfj-ha-select">2-HA auswählen</label>
           <div class="rfj-select-wrap">
             <select id="rfj-ha-select" class="rfj-select" aria-label="Hinterachslast auswählen"></select>
@@ -1157,39 +1161,39 @@
           C: "ab 2.549,00 €"
         },
         priceNotes: {
-          A: "Stand Website: CP Zusatzluftfahrwerk Hinterachse mit Einbau.",
-          B: "Stand Website: Komplettangebot Auflastung mit CP Luftfedersystem HA + CP Schraubenfedern VA.",
-          C: "Stand Website: Performance Flex Angebotspreis ab 2.549,00 €."
+          A: "Komplettpreis inkl. Montage und Eintragung – ideal für mehr Reserven an der Hinterachse.",
+          B: "Komplettpreis inkl. Montage und Eintragung – unsere ausgewogene Lösung für Vorder- und Hinterachse.",
+          C: "Premium-Komplettfahrwerk ab Angebotspreis – für maximale Fahrwerksoptimierung."
         },
         priceIncludes: {
           A: [
             "inkl. MwSt.",
-            "inkl. Einbau durch Ramto",
+            "inkl. Montage bei RAMTO",
             "inkl. TÜV-Eintragung / TÜV-Abnahme wenn gewünscht",
-            "Auflastung mit Typenschild inklusive, sofern gewünscht",
-            "Einweisung, Leihwagen und Warteraum laut Website",
+            "Auflastung mit Typenschild inklusive, sofern technisch möglich",
+            "persönliche Einweisung vor Ort",
             "zzgl. ggf. notwendiger Räder/Reifen"
           ],
           B: [
             "inkl. MwSt.",
-            "Montage durch Fahrwerkstechniker",
+            "Montage durch RAMTO-Fahrwerkstechniker",
             "TÜV-Eintragung inklusive",
-            "Auflastung inkl. Typenschild und TÜV-Abnahme wenn gewünscht",
-            "Einweisung, Leihwagen und Warteraum laut Website",
+            "Auflastung mit Typenschild inklusive, sofern technisch möglich",
+            "persönliche Einweisung vor Ort",
             "zzgl. ggf. notwendiger Räder/Reifen"
           ],
           C: [
             "inkl. Montage aller Komponenten",
-            "inkl. Spureinstellung / Überprüfung",
+            "inkl. Fahrzeugwiegung wenn erforderlich",
+            "inkl. Spurüberprüfung / Spureinstellung",
             "inkl. TÜV-Eintragung vor Ort",
             "kostenlose Auflastung wenn gewünscht",
-            "Wiegung wenn erforderlich",
-            "zzgl. ggf. notwendiger Räder/Reifen"
+            "RAMTO: Fahrwerk, Räder, Reifen und TÜV aus einer Hand"
           ]
         }
       };
 
-      // Werte aus der Ramto-Tabelle „Auflastungsmöglichkeiten Fiat Ducato“.
+      // Technische Zuordnung fuer den Konfigurator.
       // Zum Anpassen nur die Zahlen in ist / vaHaCp / haCp ändern oder Zeilen ergänzen.
       // ist = aktuell eingetragene Werte. haCp = Option A. vaHaCp = Optionen B und C.
       var AUFLASTUNG_DATEN = [
@@ -1212,52 +1216,59 @@
         {
           key: "A",
           name: "CP Luftfedersystem Hinterachse",
-          subtitle: "Nur Hinterachse: 2-Kreis-Zusatzluftfederung für mehr Reserven, Niveau und Hinterachslast.",
+          subtitle: "Die pragmatische Lösung, wenn vor allem die Hinterachse mehr Unterstützung und Zuladungsreserve braucht.",
           dataKey: "haCp",
-          imageText: "Bildplatzhalter: CP Zusatzluftfederung / Luftbalg an der Hinterachse",
+          imagePath: "images/option-a.png",
+          imageAlt: "Fiat Ducato Camper mit CP Luftfedersystem an der Hinterachse, vorne tiefer als hinten",
           pros: [
-            "Unterstützt gezielt die Hinterachse – besonders relevant bei Heckgarage, Fahrrad- oder Rollerträger.",
-            "Niveauregulierung hinten und mehr Flexibilität bei unterschiedlicher Beladung.",
-            "Geringerer Umbauumfang als Vorderachs-Kombi oder Komplettfahrwerk."
+            "Gezielte Unterstützung der Hinterachse – besonders hilfreich bei Heckgarage, Fahrradträger, Rollerträger oder hoher Beladung im Heck.",
+            "Die Hinterachse kann per Luftdruck besser an unterschiedliche Beladung angepasst werden.",
+            "Mehr Reserven, bessere Stabilität und ein deutlich souveräneres Fahrgefühl als im stark beladenen Serienzustand.",
+            "Geringerer Umbauumfang und attraktiver Preis gegenüber den umfangreicheren Lösungen."
           ],
           cons: [
             "Die Vorderachse bleibt seriennah und wird nicht angehoben.",
-            "Das Fahrzeug kann hinten höher stehen; für eine ausgewogene Fahrzeuglage sind Vorderachsfedern sinnvoll.",
-            "Weniger Komfort- und Fahrdynamikgewinn als bei Option B oder C."
+            "Das Fahrzeug kann vorne sichtbar tiefer stehen als hinten – es entsteht eine leichte Keilform.",
+            "Für mehr Komfort, mehr Bodenfreiheit und eine waagerechte Fahrzeuglage ist Option B oder C die bessere Wahl."
           ]
         },
         {
           key: "B",
           name: "CP Luftfedersystem HA + CP Komfortfedern VA",
-          subtitle: "Kombination aus Zusatzluftfederung hinten und passenden Schraubenfedern an der Vorderachse.",
+          subtitle: "Unsere ausgewogene Empfehlung: Hinterachse entlasten, Vorderachse anheben und das Fahrzeug harmonischer ausrichten.",
           dataKey: "vaHaCp",
-          imageText: "Bildplatzhalter: CP Vorderachsfedern + CP Zusatzluftfederung Hinterachse",
+          imagePath: "images/option-b.png",
+          imageAlt: "Fiat Ducato Camper mit CP Komfortfedern Vorderachse und CP Luftfedersystem Hinterachse",
           pros: [
-            "Vorder- und Hinterachse werden sinnvoll kombiniert; das Fahrzeug steht ausgewogener.",
-            "Mehr Bodenfreiheit, Federweg und Komfort an der Vorderachse.",
-            "Bessere Balance als reine Hinterachs-Auflastung; oft weniger Bedarf an Auffahrkeilen."
+            "Das Fahrzeug steht deutlich ausgewogener und meist näher an einer waagerechten Linie.",
+            "Mehr Bodenfreiheit und Federweg an der Vorderachse – hilfreich bei Fähren, Einfahrten, Bordsteinen und langen Überhängen.",
+            "Mehr Fahrkomfort vorne und hinten sowie ein stabileres Gefühl bei Seitenwind, Kurven und Lastwechseln.",
+            "Sehr gute Lösung, wenn neben der Auflastung auch Alltagstauglichkeit und Komfort spürbar besser werden sollen."
           ],
           cons: [
-            "Mehr Umbauumfang und höhere Kosten als Option A.",
-            "Dämpfer bleiben je nach Fahrzeug weiterhin ein separates Optimierungsthema.",
-            "Die passende Federvariante muss anhand Fahrzeuggewicht und Ausstattung geprüft werden."
+            "Mehr Umbauumfang und höhere Investition als die reine Hinterachs-Lösung.",
+            "Die passende Federvariante wird individuell nach Fahrzeuggewicht und Ausstattung geprüft.",
+            "Wer das Maximum aus Komfort, Dämpfung und Fahrperformance holen möchte, sollte Option C prüfen."
           ]
         },
         {
           key: "C",
           name: "Performance Flex Komplettfahrwerk",
-          subtitle: "Komplettlösung mit Luftfahrwerk, Federn und Dämpfer-Upgrade für maximale Fahrwerksoptimierung.",
+          subtitle: "Die Premium-Lösung für Stabilität, Komfort, Bodenfreiheit, Auflastung und Fahrperformance aus einem Guss.",
           dataKey: "vaHaCp",
-          imageText: "Bildplatzhalter: Performance Flex Komplettfahrwerk",
+          imagePath: "images/option-c.png",
+          imageAlt: "Fiat Ducato Camper mit Performance Flex Komplettfahrwerk, Federn, Luftfahrwerk und Dämpfern",
           pros: [
-            "Größter Nutzen bei Stabilität, Komfort, Bodenfreiheit und Fahrdynamik.",
-            "Ganzheitliche Fahrwerkslösung statt reiner Achslast-Erhöhung.",
-            "Besonders sinnvoll, wenn neben Zuladung auch Fahrverhalten und Komfort optimiert werden sollen."
+            "Ganzheitliche Fahrwerksoptimierung statt reiner Achslast-Erhöhung – abgestimmt auf Gewicht, Nutzung und gewünschtes Fahrverhalten.",
+            "Mehr Stabilität und Sicherheit, mehr Komfort und eine spürbar bessere Fahrperformance.",
+            "Mehr Bodenfreiheit und eine waagerechte Ausrichtung des Fahrzeugs sind möglich.",
+            "CamperMatic-/Bilstein-Dämpfer, CP Komfortfedern und CP Luftfahrwerk werden als System kombiniert.",
+            "Montage, Prüfung, TÜV und auf Wunsch Auflastung direkt bei RAMTO aus einer Hand."
           ],
           cons: [
-            "Höchster Umbauumfang der drei Optionen.",
-            "Preislich oberhalb der reinen Hinterachs- oder VA/HA-Auflastungslösung.",
-            "Für reine Minimal-Auflastung möglicherweise mehr Lösung als nötig."
+            "Höchster Leistungsumfang und dadurch die größte Investition der drei Optionen.",
+            "Für eine reine Minimal-Auflastung kann Option A oder B bereits ausreichen.",
+            "Die finale Konfiguration wird nach Fahrzeuggewicht und gewünschtem Fahrverhalten individuell festgelegt."
           ]
         }
       ];
@@ -1582,19 +1593,19 @@
       function renderResults() {
         var row = selectedRow();
         var intro = row
-          ? "Passendes Tabellenprofil: " + row.chassis + " Typ " + row.typ + " mit " + kg(row.ist.zgg) + " zGG, " + kg(row.ist.va) + " VA und " + kg(row.ist.ha) + " HA."
+          ? "Ihre Angaben wurden erkannt: " + row.chassis + " Typ " + row.typ + " mit " + kg(row.ist.zgg) + " zGG, " + kg(row.ist.va) + " VA und " + kg(row.ist.ha) + " HA."
           : "Die ausgewählte Kombination konnte nicht eindeutig zugeordnet werden. Bitte Daten prüfen lassen.";
 
         var html = "";
         html += "<div class='rfj-result-head'>";
-        html += "  <div><h3>Ihre möglichen Auflastungsoptionen</h3><p>" + escapeHtml(intro) + "</p></div>";
+        html += "  <div><h3>Ihre passenden RAMTO-Auflastungslösungen</h3><p>" + escapeHtml(intro) + "</p></div>";
         html += "  <span class='rfj-pill'>" + escapeHtml(kg(state.zgg)) + " aktuell</span>";
         html += "</div>";
 
         html += "<div class='rfj-alert'><strong>Wichtige Voraussetzung</strong>Die genannten Traglasten gelten nur, wenn Räder und Reifen die jeweilige Tragkraft erfüllen. Passende Fiat-Felgen/Räder sind verfügbar: <a href='" + escapeHtml(AUFLASTUNG_CONFIG.wheelUrl) + "' target='_blank' rel='noopener'>Fiat-Felgen ansehen</a>.</div>";
 
         if (!row) {
-          html += "<div class='rfj-alert'><strong>Bitte prüfen lassen</strong>Die Kombination ist nicht eindeutig in der hinterlegten Tabelle enthalten. Bitte senden Sie die Daten zur manuellen Prüfung.</div>";
+          html += "<div class='rfj-alert'><strong>Bitte prüfen lassen</strong>Ihre Kombination braucht eine individuelle Prüfung. Senden Sie uns die Daten einfach zu – wir prüfen die passende Lösung persönlich.</div>";
         }
 
         html += "<div class='rfj-options'>";
@@ -1611,7 +1622,7 @@
           html += "    <div><h4>" + escapeHtml(option.name) + "</h4><p>" + escapeHtml(option.subtitle) + "</p></div>";
           html += "  </div>";
           html += "  <div class='rfj-option-main'>";
-          html += "    <div class='rfj-option-image'>" + escapeHtml(option.imageText) + "</div>";
+          html += "    <div class='rfj-option-image rfj-has-img'><img src='" + escapeHtml(option.imagePath) + "' alt='" + escapeHtml(option.imageAlt || option.name) + "' loading='lazy'></div>";
           html += "    <div class='rfj-kpi-stack'>";
           html += "      <div class='rfj-load-box'><span>zGG neu</span><strong>" + escapeHtml(kg(target.zgg)) + "</strong></div>";
           html += "      <div class='rfj-load-box'><span>VA max.</span><strong>" + escapeHtml(kg(target.va)) + "</strong></div>";
@@ -1639,7 +1650,7 @@
         html += "</div>";
         html += "<div class='rfj-summary-list'>";
         html += "  <strong>Ihre Eingaben:</strong> zGG " + escapeHtml(kg(state.zgg)) + " · 1-VA " + escapeHtml(kg(state.va)) + " · 2-HA " + escapeHtml(kg(state.ha)) + ".";
-        html += "  <span>Die finale technische Prüfung, passende Rad-/Reifenkombination und Abnahme erfolgen individuell.</span>";
+        html += "  <span>Die finale technische Prüfung, die passende Rad-/Reifenkombination und die Abnahme stimmen wir individuell mit Ihnen ab.</span>";
         html += "</div>";
         html += "<div class='rfj-option-actions' style='padding:18px 0 0'><button type='button' class='rfj-button' data-restart>Neu starten</button></div>";
 
