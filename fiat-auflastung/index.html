@@ -4,12 +4,12 @@
   <meta charset="UTF-8">
   <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Ramto Fiat Ducato Auflastungs-Check</title>
+  <title>ramto Fiat Ducato Auflastungs-Check</title>
 </head>
 <body>
 <!-- JIMDO-CODE START -->
 <!--
-  Ramto Fiat Ducato Auflastungs-Check
+  ramto Fiat Ducato Auflastungs-Check
   Version: 5.0
   Stand: 26.06.2026
   Einbau in Jimdo: Bei der Jimdo-Block-Datei alles kopieren. Bei der Vollversion nur den Bereich zwischen JIMDO-CODE START und JIMDO-CODE ENDE kopieren.
@@ -1046,9 +1046,9 @@
 
   <div class="rfj-shell">
     <div class="rfj-hero">
-      <div class="rfj-kicker">Ramto Auflastungs-Check</div>
+      <div class="rfj-kicker">ramto Auflastungs-Check</div>
       <h2>Fiat Ducato Auflastung schnell prüfen</h2>
-      <p>Wählen Sie Schritt für Schritt die eingetragenen Werte aus Fahrzeugschein oder Typenschild. Am Ende sehen Sie passende RAMTO-Lösungen mit möglichen neuen Achslasten und Gesamtgewichten.</p>
+      <p>Wählen Sie Schritt für Schritt die eingetragenen Werte aus Fahrzeugschein oder Typenschild. Am Ende sehen Sie passende ramto-Lösungen mit möglichen neuen Achslasten und Gesamtgewichten.</p>
     </div>
 
     <div class="rfj-progress-wrap">
@@ -1149,6 +1149,7 @@
 
       var AUFLASTUNG_CONFIG = {
         email: "info@ramto.de",
+        emailCc: "eric@ramto.de",
         wheelUrl: "https://www.ramto.de/r%C3%A4der-u-felgen/fiatalle/",
         productUrls: {
           A: "https://www.ramto.de/fahrwerk/#cc-m-product-10205992150",
@@ -1168,7 +1169,7 @@
         priceIncludes: {
           A: [
             "inkl. MwSt.",
-            "inkl. Montage bei RAMTO",
+            "inkl. Montage bei ramto",
             "inkl. TÜV-Eintragung / TÜV-Abnahme wenn gewünscht",
             "Auflastung mit Typenschild inklusive, sofern technisch möglich",
             "persönliche Einweisung vor Ort",
@@ -1176,7 +1177,7 @@
           ],
           B: [
             "inkl. MwSt.",
-            "Montage durch RAMTO-Fahrwerkstechniker",
+            "Montage durch ramto-Fahrwerkstechniker",
             "TÜV-Eintragung inklusive",
             "Auflastung mit Typenschild inklusive, sofern technisch möglich",
             "persönliche Einweisung vor Ort",
@@ -1188,7 +1189,7 @@
             "inkl. Spurüberprüfung / Spureinstellung",
             "inkl. TÜV-Eintragung vor Ort",
             "kostenlose Auflastung wenn gewünscht",
-            "RAMTO: Fahrwerk, Räder, Reifen und TÜV aus einer Hand"
+            "ramto: Fahrwerk, Räder, Reifen und TÜV aus einer Hand"
           ]
         }
       };
@@ -1263,7 +1264,7 @@
             "Mehr Stabilität und Sicherheit, mehr Komfort und eine spürbar bessere Fahrperformance.",
             "Mehr Bodenfreiheit und eine waagerechte Ausrichtung des Fahrzeugs sind möglich.",
             "CamperMatic-/Bilstein-Dämpfer, CP Komfortfedern und CP Luftfahrwerk werden als System kombiniert.",
-            "Montage, Prüfung, TÜV und auf Wunsch Auflastung direkt bei RAMTO aus einer Hand."
+            "Montage, Prüfung, TÜV und auf Wunsch Auflastung direkt bei ramto aus einer Hand."
           ],
           cons: [
             "Höchster Leistungsumfang und dadurch die größte Investition der drei Optionen.",
@@ -1519,11 +1520,43 @@
         return row[option.dataKey] || { zgg: null, va: null, ha: null };
       }
 
+      function trackEvent(eventName, params) {
+        params = params || {};
+        params.event_category = params.event_category || "Fiat Auflastungs-Check";
+
+        if (window.gtag && typeof window.gtag === "function") {
+          window.gtag("event", eventName, params);
+        }
+
+        if (window.dataLayer && Array.isArray(window.dataLayer)) {
+          window.dataLayer.push(Object.assign({ event: eventName }, params));
+        }
+      }
+
+      function trackingBase(option, row) {
+        return {
+          option: option ? option.key : undefined,
+          option_name: option ? option.name : undefined,
+          current_zgg: state.zgg || undefined,
+          current_va: state.va || undefined,
+          current_ha: state.ha || undefined,
+          chassis: row ? row.chassis : undefined,
+          vehicle_type: row ? row.typ : undefined
+        };
+      }
+
+      function addCcToMailto(baseUrl, subject, body) {
+        return baseUrl +
+          "?cc=" + encodeURIComponent(AUFLASTUNG_CONFIG.emailCc || "") +
+          "&subject=" + encodeURIComponent(subject) +
+          "&body=" + encodeURIComponent(body);
+      }
+
       function buildMailto(option, row) {
         var target = targetValues(row, option);
         var subject = "Anfrage Fiat Ducato Auflastung - Option " + option.key + " - " + option.name;
         var bodyLines = [
-          "Hallo Ramto-Team,",
+          "Hallo ramto-Team,",
           "",
           "ich interessiere mich für eine Auflastung meines Fiat Ducato / Stellantis Wohnmobils.",
           "",
@@ -1552,15 +1585,13 @@
           "Vielen Dank!"
         ];
 
-        return "mailto:" + AUFLASTUNG_CONFIG.email +
-          "?subject=" + encodeURIComponent(subject) +
-          "&body=" + encodeURIComponent(bodyLines.join("\n"));
+        return addCcToMailto("mailto:" + AUFLASTUNG_CONFIG.email, subject, bodyLines.join("\n"));
       }
 
       function buildNoLeafMailto() {
         var subject = "Rückfrage Fiat Ducato Auflastung - keine Blattfederung / unsicher";
         var body = [
-          "Hallo Ramto-Team,",
+          "Hallo ramto-Team,",
           "",
           "ich habe die Auflastungs-Journey genutzt, bin aber bei der Blattfederung nicht sicher bzw. mein Fahrzeug hat keine Blattfederung an der Hinterachse.",
           "",
@@ -1568,11 +1599,12 @@
           "",
           "Vielen Dank!"
         ].join("\n");
-        return "mailto:" + AUFLASTUNG_CONFIG.email + "?subject=" + encodeURIComponent(subject) + "&body=" + encodeURIComponent(body);
+        return addCcToMailto("mailto:" + AUFLASTUNG_CONFIG.email, subject, body);
       }
 
       function renderNoLeaf() {
         results.hidden = false;
+        trackEvent("no_leaf_result_shown", { leaf_spring: "no_or_unsure" });
         results.innerHTML = "" +
           "<div class='rfj-result-head'>" +
           "  <div>" +
@@ -1581,9 +1613,9 @@
           "  </div>" +
           "  <span class='rfj-pill'>Blattfederung: Nein / unsicher</span>" +
           "</div>" +
-          "<div class='rfj-alert'><strong>Bei Unsicherheit:</strong> Senden Sie Ramto Fotos der Hinterachse, des Fahrzeugscheins und des Typenschilds. Dann kann das Team prüfen, ob eine Alternative möglich ist.</div>" +
+          "<div class='rfj-alert'><strong>Bei Unsicherheit:</strong> Senden Sie ramto Fotos der Hinterachse, des Fahrzeugscheins und des Typenschilds. Dann kann das Team prüfen, ob eine Alternative möglich ist.</div>" +
           "<div class='rfj-option-actions' style='padding:0'>" +
-          "  <a class='rfj-button rfj-button-primary' href='" + escapeHtml(buildNoLeafMailto()) + "'>Rückfrage senden</a>" +
+          "  <a class='rfj-button rfj-button-primary' data-track='mail-no-leaf' href='" + escapeHtml(buildNoLeafMailto()) + "'>Rückfrage senden</a>" +
           "  <button type='button' class='rfj-button' data-restart>Neu starten</button>" +
           "</div>";
         updateProgress();
@@ -1598,7 +1630,7 @@
 
         var html = "";
         html += "<div class='rfj-result-head'>";
-        html += "  <div><h3>Ihre passenden RAMTO-Auflastungslösungen</h3><p>" + escapeHtml(intro) + "</p></div>";
+        html += "  <div><h3>Ihre passenden ramto-Auflastungslösungen</h3><p>" + escapeHtml(intro) + "</p></div>";
         html += "  <span class='rfj-pill'>" + escapeHtml(kg(state.zgg)) + " aktuell</span>";
         html += "</div>";
 
@@ -1639,10 +1671,10 @@
           html += "    <div class='rfj-procon-box'><h5>Vorteile</h5><ul>" + option.pros.map(function (item) { return "<li>" + escapeHtml(item) + "</li>"; }).join("") + "</ul></div>";
           html += "    <div class='rfj-procon-box'><h5>Zu beachten</h5><ul>" + option.cons.map(function (item) { return "<li>" + escapeHtml(item) + "</li>"; }).join("") + "</ul></div>";
           html += "  </div>";
-          html += "  <div class='rfj-wheel-note'><strong>Räder/Reifen:</strong> Für die angezeigten Traglasten müssen Felgen und Reifen die entsprechende Tragkraft haben. Ramto kann passende Fiat-Räder/Felgen prüfen und anbieten.</div>";
+          html += "  <div class='rfj-wheel-note'><strong>Räder/Reifen:</strong> Für die angezeigten Traglasten müssen Felgen und Reifen die entsprechende Tragkraft haben. ramto kann passende Fiat-Räder/Felgen prüfen und anbieten.</div>";
           html += "  <div class='rfj-option-actions'>";
-          html += "    <a class='rfj-button rfj-button-dark' href='" + escapeHtml(productUrl) + "' target='_blank' rel='noopener'>Zur Produktseite</a>";
-          html += "    <a class='rfj-button rfj-button-primary' href='" + escapeHtml(mailto) + "'>Anfragen</a>";
+          html += "    <a class='rfj-button rfj-button-dark' data-track='product' data-option='" + escapeHtml(option.key) + "' href='" + escapeHtml(productUrl) + "' target='_blank' rel='noopener'>Zur Produktseite</a>";
+          html += "    <a class='rfj-button rfj-button-primary' data-track='mail' data-option='" + escapeHtml(option.key) + "' href='" + escapeHtml(mailto) + "'>Anfragen</a>";
           html += "  </div>";
           html += "</article>";
         });
@@ -1656,6 +1688,7 @@
 
         results.hidden = false;
         results.innerHTML = html;
+        trackEvent("results_shown", trackingBase(null, row));
         updateProgress();
         safeScrollTo(results);
       }
@@ -1690,6 +1723,7 @@
             return false;
           }
           state.leaf = target.value === "yes";
+          trackEvent(state.leaf ? "leaf_yes" : "leaf_no", { leaf_spring: state.leaf ? "yes" : "no" });
           state.zgg = null;
           state.va = null;
           state.ha = null;
@@ -1708,6 +1742,7 @@
             return false;
           }
           state.zgg = parseInt(target.value, 10);
+          trackEvent("selected_zgg", { current_zgg: state.zgg });
           state.va = null;
           state.ha = null;
           goTo(2);
@@ -1720,6 +1755,7 @@
             return false;
           }
           state.va = parseInt(target.value, 10);
+          trackEvent("selected_va", { current_zgg: state.zgg, current_va: state.va });
           state.ha = null;
           goTo(3);
           return true;
@@ -1731,6 +1767,7 @@
             return false;
           }
           state.ha = parseInt(target.value, 10);
+          trackEvent("selected_ha", { current_zgg: state.zgg, current_va: state.va, current_ha: state.ha });
           renderCurrentChoices();
           renderResults();
           return true;
@@ -1744,6 +1781,22 @@
         var restartButton = closestMatch(target, "[data-restart]");
         if (restartButton) {
           resetJourney();
+          return;
+        }
+
+        var trackedLink = closestMatch(target, "[data-track]");
+        if (trackedLink) {
+          var trackType = trackedLink.getAttribute("data-track");
+          var optionKey = trackedLink.getAttribute("data-option");
+          var option = OPTIONEN.filter(function (item) { return item.key === optionKey; })[0] || null;
+          var row = selectedRow();
+          if (trackType === "product") {
+            trackEvent("product_button_clicked", trackingBase(option, row));
+          } else if (trackType === "mail") {
+            trackEvent("email_button_clicked", trackingBase(option, row));
+          } else if (trackType === "mail-no-leaf") {
+            trackEvent("email_button_clicked", { option: "no_leaf", leaf_spring: "no_or_unsure" });
+          }
           return;
         }
 
@@ -1780,6 +1833,7 @@
         event.preventDefault();
       });
 
+      trackEvent("configurator_started", {});
       renderCurrentChoices();
       updateProgress();
     })();
