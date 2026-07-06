@@ -10,7 +10,7 @@
 <!-- JIMDO-CODE START -->
 <!--
   ramto Fiat Ducato Auflastungs-Check
-  Version: 6.2
+  Version: 6.3
   Stand: 06.07.2026
   Einbau in Jimdo: Bei der Jimdo-Block-Datei alles kopieren. Bei der Vollversion nur den Bereich zwischen JIMDO-CODE START und JIMDO-CODE ENDE kopieren.
 
@@ -1470,7 +1470,7 @@
         // 1) Apps-Script-Code aus der separaten Datei in ein Google Sheet einfügen.
         // 2) Als Web-App bereitstellen.
         // 3) Die Web-App-URL hier eintragen.
-        sheetEndpoint: "https://script.google.com/macros/s/AKfycbzS5wwm-wB5GjsxnqDSj5erqAq0w2mDdfEkcPixPcsAqchdCO9J4cWiabGm0J_wnqSB/exec",
+        sheetEndpoint: "https://script.google.com/macros/s/AKfycbzEk3s6D1dOL6xJYr0k_tW1G3Tj2-hsBfJtHUPP5VWQeG9o2EuEejjn10esrBSfrVR0/exec",
 
         // Muss identisch mit WRITE_TOKEN im Apps Script sein. Kein echter Geheimschutz,
         // weil der Wert im Frontend sichtbar ist, aber gut gegen einfache Fremdposts/Bots.
@@ -2039,7 +2039,8 @@
         };
       }
 
-      function saveInquiry(payload) {
+      function saveInquiry(payload, options) {
+        options = options || {};
         var endpoint = AUFLASTUNG_CONFIG.sheetEndpoint || "";
         if (!endpoint) {
           if (window.console && console.warn) console.warn("ramto Auflastungs-Check: sheetEndpoint ist nicht konfiguriert.");
@@ -2047,19 +2048,20 @@
         }
 
         var body = JSON.stringify(payload || {});
+        var useKeepalive = options.keepalive !== false;
 
         if (window.fetch) {
           return fetch(endpoint, {
             method: "POST",
             mode: "no-cors",
             cache: "no-cache",
-            keepalive: true,
+            keepalive: useKeepalive,
             headers: { "Content-Type": "text/plain;charset=UTF-8" },
             body: body
           }).then(function () {
             return true;
           }).catch(function () {
-            if (navigator.sendBeacon) {
+            if (useKeepalive && navigator.sendBeacon) {
               try {
                 var blob = new Blob([body], { type: "text/plain;charset=UTF-8" });
                 return navigator.sendBeacon(endpoint, blob);
@@ -2069,7 +2071,7 @@
           });
         }
 
-        if (navigator.sendBeacon) {
+        if (useKeepalive && navigator.sendBeacon) {
           try {
             var beaconBlob = new Blob([body], { type: "text/plain;charset=UTF-8" });
             return Promise.resolve(navigator.sendBeacon(endpoint, beaconBlob));
@@ -2556,7 +2558,7 @@
             extra.photos = photos;
             var payload = buildInquiryPayload("formular", activeFormInquiry.inquiryType, option, row, extra);
             setFormStatus("Ihre Anfrage wird übertragen ...", false);
-            return saveInquiry(payload);
+            return saveInquiry(payload, { keepalive: false });
           }).then(function (ok) {
             if (contactSubmit) contactSubmit.disabled = false;
             if (!ok) {
