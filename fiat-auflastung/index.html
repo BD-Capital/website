@@ -10,7 +10,7 @@
 <!-- JIMDO-CODE START -->
 <!--
   ramto Fiat Ducato Auflastungs-Check
-  Version: 6.5
+  Version: 6.6 Clean Logging
   Stand: 06.07.2026
   Einbau in Jimdo: Bei der Jimdo-Block-Datei alles kopieren. Bei der Vollversion nur den Bereich zwischen JIMDO-CODE START und JIMDO-CODE ENDE kopieren.
 
@@ -1470,7 +1470,7 @@
         // 1) Apps-Script-Code aus der separaten Datei in ein Google Sheet einfügen.
         // 2) Als Web-App bereitstellen.
         // 3) Die Web-App-URL hier eintragen.
-        sheetEndpoint: "https://script.google.com/macros/s/AKfycbyAAJAiK6L-Xfb8m3sGxdUWiST3eDYI5mV4oO13bHSzwCbAbrYqcdzyxfRjRO70ZmaU/exec",
+        sheetEndpoint: "https://script.google.com/macros/s/AKfycbxCzHRLfjfmfh3Yvho8RnXuEOitEx5_E3FxBlxDE7GkZkQLR4fi43jQqTiicbMmNJVh/exec",
 
         // Muss identisch mit WRITE_TOKEN im Apps Script sein. Kein echter Geheimschutz,
         // weil der Wert im Frontend sichtbar ist, aber gut gegen einfache Fremdposts/Bots.
@@ -2008,7 +2008,7 @@
         var target = option ? targetValues(row, option) : { zgg: null, va: null, ha: null };
         return {
           writeToken: AUFLASTUNG_CONFIG.sheetWriteToken || "",
-          toolVersion: "6.2",
+          toolVersion: "6.6",
           timestampClient: new Date().toISOString(),
           sourcePage: window.location.href,
           pageTitle: document.title || "",
@@ -2046,8 +2046,14 @@
           return Promise.resolve(false);
         }
 
-        var body = JSON.stringify(payload || {});
+        payload = payload || {};
+        payload.writeToken = AUFLASTUNG_CONFIG.sheetWriteToken || "";
+        payload.requestId = payload.requestId || ("rfj-" + Date.now() + "-" + Math.floor(Math.random() * 100000));
 
+        var body = JSON.stringify(payload);
+
+        // Apps Script antwortet bei fremden Domains ohne sauber nutzbare CORS-Response.
+        // Deshalb bewusst Fire-and-forget per no-cors. Erfolg im Frontend bedeutet: Request wurde abgeschickt.
         if (window.fetch) {
           return fetch(endpoint, {
             method: "POST",
@@ -2554,7 +2560,6 @@
 
           extra.photos = [];
           var payload = buildInquiryPayload("formular", activeFormInquiry.inquiryType, option, row, extra);
-          payload.messageText = "";
 
           setFormStatus("Ihre Anfrage wird übertragen ...", false);
           saveInquiry(payload).then(function (ok) {
@@ -2564,8 +2569,8 @@
               return;
             }
             trackEvent("form_submitted", trackingBase(option, row));
-            setFormStatus("Vielen Dank. Ihre Anfrage wurde übermittelt.", false);
-            showNotice("Formularanfrage wurde gespeichert und an ramto übermittelt.");
+            setFormStatus("Vielen Dank. Ihre Anfrage wurde abgeschickt.", false);
+            showNotice("Formularanfrage wurde an ramto übertragen.");
             window.setTimeout(closeContactForm, 1400);
           }).catch(function (error) {
             if (contactSubmit) contactSubmit.disabled = false;
