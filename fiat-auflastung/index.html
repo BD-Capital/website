@@ -10,8 +10,8 @@
 <!-- JIMDO-CODE START -->
 <!--
   ramto Fiat Ducato Auflastungs-Check
-  Version: 5.0
-  Stand: 26.06.2026
+  Version: 6.0
+  Stand: 06.07.2026
   Einbau in Jimdo: Bei der Jimdo-Block-Datei alles kopieren. Bei der Vollversion nur den Bereich zwischen JIMDO-CODE START und JIMDO-CODE ENDE kopieren.
 
   Wichtige Anpassungsstellen:
@@ -19,7 +19,8 @@
   - AUFLASTUNG_CONFIG.prices: Preise je Option
   - AUFLASTUNG_CONFIG.productUrls / wheelUrl: Links
   - Bilder liegen im Ordner images/ als webp: blattfeder.webp, zgg.webp, va.webp, ha.webp, option-a.webp, option-b.webp, option-c.webp
-  - Version 5: echte Bildpfade, kundenfreundlichere Beratungstexte, keine Tabellenhinweise im Frontend
+  - Version 6: Kontaktwege E-Mail / WhatsApp / Formular, Google-Sheets-Logging fuer jede Anfrage, Formular-Mail nur bei Kanal Formular
+  - Wichtig: AUFLASTUNG_CONFIG.sheetEndpoint, sheetWriteToken und whatsappPhone vor Livegang eintragen
 -->
 <div id="ramto-fiat-journey" class="rfj">
   <style>
@@ -859,6 +860,259 @@
       color: var(--rfj-black);
     }
 
+    #ramto-fiat-journey .rfj-help-card {
+      margin-top: 20px;
+      padding: 16px;
+      border: 1px solid rgba(232, 114, 12, 0.24);
+      border-radius: 15px;
+      background: var(--rfj-soft-orange);
+    }
+
+    #ramto-fiat-journey .rfj-help-card strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--rfj-black);
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    #ramto-fiat-journey .rfj-help-card p {
+      margin-bottom: 12px;
+      color: var(--rfj-warning-text);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    #ramto-fiat-journey .rfj-contact-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    #ramto-fiat-journey .rfj-contact-actions .rfj-button,
+    #ramto-fiat-journey .rfj-option-actions .rfj-contact-button {
+      flex: 1 1 145px;
+    }
+
+    #ramto-fiat-journey .rfj-button-small {
+      min-height: 44px;
+      padding: 11px 13px;
+      font-size: 14px;
+    }
+
+    #ramto-fiat-journey .rfj-contact-notice {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      z-index: 99999;
+      max-width: min(520px, calc(100vw - 28px));
+      padding: 13px 16px;
+      border-radius: 14px;
+      background: var(--rfj-anthracite);
+      color: var(--rfj-white);
+      box-shadow: var(--rfj-shadow);
+      font-size: 14px;
+      font-weight: 800;
+      transform: translate(-50%, 18px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+
+    #ramto-fiat-journey .rfj-contact-notice.is-visible {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    #ramto-fiat-journey .rfj-modal[hidden] {
+      display: none;
+    }
+
+    #ramto-fiat-journey .rfj-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 99998;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+
+    #ramto-fiat-journey .rfj-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.58);
+    }
+
+    #ramto-fiat-journey .rfj-modal-panel {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 760px;
+      max-height: 90vh;
+      overflow: auto;
+      padding: 26px;
+      border-radius: 22px;
+      background: var(--rfj-white);
+      box-shadow: var(--rfj-shadow);
+    }
+
+    #ramto-fiat-journey .rfj-modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--rfj-border);
+      border-radius: 50%;
+      background: var(--rfj-soft);
+      color: var(--rfj-black);
+      font-size: 26px;
+      line-height: 1;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    #ramto-fiat-journey .rfj-modal-panel h3 {
+      max-width: 620px;
+      margin: 0 50px 8px 0;
+      font-size: clamp(24px, 3vw, 34px);
+      line-height: 1.12;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+
+    #ramto-fiat-journey .rfj-modal-panel > p {
+      margin-bottom: 14px;
+      color: var(--rfj-muted);
+    }
+
+    #ramto-fiat-journey .rfj-modal-summary {
+      display: grid;
+      gap: 5px;
+      margin: 0 0 16px;
+      padding: 13px 15px;
+      border-radius: 14px;
+      background: var(--rfj-soft);
+      color: var(--rfj-muted);
+      font-size: 14px;
+    }
+
+    #ramto-fiat-journey .rfj-modal-summary strong {
+      color: var(--rfj-black);
+    }
+
+    #ramto-fiat-journey .rfj-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    #ramto-fiat-journey .rfj-field {
+      display: block;
+      min-width: 0;
+    }
+
+    #ramto-fiat-journey .rfj-field-full {
+      grid-column: 1 / -1;
+    }
+
+    #ramto-fiat-journey .rfj-field span {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--rfj-black);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    #ramto-fiat-journey .rfj-input,
+    #ramto-fiat-journey .rfj-textarea {
+      width: 100%;
+      border: 2px solid var(--rfj-border);
+      border-radius: 13px;
+      background: var(--rfj-white);
+      color: var(--rfj-black);
+      font: inherit;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    #ramto-fiat-journey .rfj-input {
+      min-height: 52px;
+      padding: 12px 13px;
+    }
+
+    #ramto-fiat-journey .rfj-textarea {
+      min-height: 112px;
+      padding: 12px 13px;
+      resize: vertical;
+    }
+
+    #ramto-fiat-journey .rfj-input:focus,
+    #ramto-fiat-journey .rfj-textarea:focus {
+      border-color: var(--rfj-orange);
+      box-shadow: 0 0 0 4px rgba(232, 114, 12, 0.13);
+    }
+
+    #ramto-fiat-journey .rfj-consent {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin-top: 14px;
+      color: var(--rfj-muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    #ramto-fiat-journey .rfj-consent input {
+      flex: 0 0 auto;
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: var(--rfj-orange);
+    }
+
+    #ramto-fiat-journey .rfj-form-status {
+      display: none;
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 13px;
+      font-weight: 800;
+    }
+
+    #ramto-fiat-journey .rfj-form-status.is-visible {
+      display: block;
+    }
+
+    #ramto-fiat-journey .rfj-form-status.is-success {
+      background: #EAF7EF;
+      color: var(--rfj-success);
+    }
+
+    #ramto-fiat-journey .rfj-form-status.is-error {
+      background: var(--rfj-warning-bg);
+      color: var(--rfj-warning-text);
+    }
+
+    #ramto-fiat-journey .rfj-modal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 16px;
+    }
+
+    #ramto-fiat-journey .rfj-hp {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+    }
+
     @media (max-width: 1060px) {
       #ramto-fiat-journey .rfj-option-main {
         grid-template-columns: minmax(230px, 1fr) minmax(220px, 1fr);
@@ -992,8 +1246,23 @@
       }
 
       #ramto-fiat-journey .rfj-nav,
-      #ramto-fiat-journey .rfj-option-actions {
+      #ramto-fiat-journey .rfj-option-actions,
+      #ramto-fiat-journey .rfj-contact-actions,
+      #ramto-fiat-journey .rfj-modal-actions {
         flex-direction: column;
+      }
+
+      #ramto-fiat-journey .rfj-form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #ramto-fiat-journey .rfj-modal {
+        padding: 10px;
+      }
+
+      #ramto-fiat-journey .rfj-modal-panel {
+        padding: 22px 16px 18px;
+        border-radius: 16px;
       }
 
       #ramto-fiat-journey .rfj-button {
@@ -1142,6 +1411,51 @@
   </div>
 
   <div id="rfj-results" class="rfj-result" hidden aria-live="polite"></div>
+  <div id="rfj-contact-notice" class="rfj-contact-notice" aria-live="polite"></div>
+
+  <div id="rfj-contact-modal" class="rfj-modal" hidden aria-hidden="true">
+    <div class="rfj-modal-backdrop" data-close-modal></div>
+    <div class="rfj-modal-panel" role="dialog" aria-modal="true" aria-labelledby="rfj-modal-title">
+      <button type="button" class="rfj-modal-close" data-close-modal aria-label="Formular schließen">×</button>
+      <h3 id="rfj-modal-title">Anfrage per Formular</h3>
+      <p id="rfj-modal-intro">Füllen Sie das Formular aus. Wir übernehmen Ihre bisherigen Angaben automatisch.</p>
+      <div id="rfj-modal-summary" class="rfj-modal-summary"></div>
+      <form id="rfj-contact-form" novalidate>
+        <input type="text" id="rfj-contact-hp" name="website" class="rfj-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <div class="rfj-form-grid">
+          <label class="rfj-field">
+            <span>Name *</span>
+            <input id="rfj-contact-name" class="rfj-input" type="text" name="name" autocomplete="name" required>
+          </label>
+          <label class="rfj-field">
+            <span>Telefonnummer</span>
+            <input id="rfj-contact-phone" class="rfj-input" type="tel" name="phone" autocomplete="tel">
+          </label>
+          <label class="rfj-field">
+            <span>E-Mail optional</span>
+            <input id="rfj-contact-email" class="rfj-input" type="email" name="email" autocomplete="email">
+          </label>
+          <label class="rfj-field">
+            <span>Adresse</span>
+            <input id="rfj-contact-address" class="rfj-input" type="text" name="address" autocomplete="street-address">
+          </label>
+          <label class="rfj-field rfj-field-full">
+            <span>Nachricht / Rückrufwunsch</span>
+            <textarea id="rfj-contact-message" class="rfj-textarea" name="message" rows="4"></textarea>
+          </label>
+        </div>
+        <label class="rfj-consent">
+          <input id="rfj-contact-consent" type="checkbox" required>
+          <span>Ich bin damit einverstanden, dass ramto meine Angaben zur Bearbeitung der Anfrage speichert und mich dazu kontaktiert.</span>
+        </label>
+        <div id="rfj-contact-status" class="rfj-form-status" aria-live="polite"></div>
+        <div class="rfj-modal-actions">
+          <button type="button" class="rfj-button" data-close-modal>Abbrechen</button>
+          <button type="submit" id="rfj-contact-submit" class="rfj-button rfj-button-primary">Formular senden</button>
+        </div>
+      </form>
+    </div>
+  </div>
 
   <script>
     (function () {
@@ -1150,6 +1464,20 @@
       var AUFLASTUNG_CONFIG = {
         email: "info@ramto.de",
         emailCc: "eric@ramto.de",
+
+        // Google-Sheets-Anbindung:
+        // 1) Apps-Script-Code aus der separaten Datei in ein Google Sheet einfügen.
+        // 2) Als Web-App bereitstellen.
+        // 3) Die Web-App-URL hier eintragen.
+        sheetEndpoint: "",
+
+        // Muss identisch mit WRITE_TOKEN im Apps Script sein. Kein echter Geheimschutz,
+        // weil der Wert im Frontend sichtbar ist, aber gut gegen einfache Fremdposts/Bots.
+        sheetWriteToken: "ramtoAuflastungsAnfragenWriteToken",
+
+        // WhatsApp im internationalen Format, nur Ziffern, ohne +, Leerzeichen oder Klammern.
+        // Beispiel: 491701234567. Leer lassen = WhatsApp-Button zeigt Formular-Fallback.
+        whatsappPhone: "+4917685649974",
         wheelUrl: "https://www.ramto.de/r%C3%A4der-u-felgen/fiatalle/",
         productUrls: {
           A: "https://www.ramto.de/fahrwerk/#cc-m-product-10205992150",
@@ -1285,11 +1613,21 @@
       var stepLabel = root.querySelector("#rfj-step-label");
       var stepName = root.querySelector("#rfj-step-name");
       var results = root.querySelector("#rfj-results");
+      var contactNotice = root.querySelector("#rfj-contact-notice");
+      var contactModal = root.querySelector("#rfj-contact-modal");
+      var contactForm = root.querySelector("#rfj-contact-form");
+      var contactTitle = root.querySelector("#rfj-modal-title");
+      var contactIntro = root.querySelector("#rfj-modal-intro");
+      var contactSummary = root.querySelector("#rfj-modal-summary");
+      var contactStatus = root.querySelector("#rfj-contact-status");
+      var contactSubmit = root.querySelector("#rfj-contact-submit");
       var leafSelect = root.querySelector("#rfj-leaf-select");
       var zggSelect = root.querySelector("#rfj-zgg-select");
       var vaSelect = root.querySelector("#rfj-va-select");
       var haSelect = root.querySelector("#rfj-ha-select");
       var currentStep = 0;
+      var activeFormInquiry = null;
+      var noticeTimer = null;
       var state = {
         leaf: null,
         zgg: null,
@@ -1545,6 +1883,340 @@
         };
       }
 
+      function cleanPhoneNumber(value) {
+        return String(value || "").replace(/[^0-9]/g, "");
+      }
+
+      function stepNameByIndex(stepIndex) {
+        var index = parseInt(stepIndex, 10);
+        if (isNaN(index) || !steps[index]) return "";
+        return steps[index].getAttribute("data-name") || "";
+      }
+
+      function stateLabel(value) {
+        return value === null || value === undefined || value === "" ? "noch nicht ausgewählt" : kg(value);
+      }
+
+      function leafLabel() {
+        if (state.leaf === true) return "Ja";
+        if (state.leaf === false) return "Nein / nicht sicher";
+        return "noch nicht ausgewählt";
+      }
+
+      function stateSummaryLines(row) {
+        return [
+          "Blattfederung Hinterachse: " + leafLabel(),
+          "Aktuelles zGG: " + stateLabel(state.zgg),
+          "Aktuelle Vorderachslast 1-VA: " + stateLabel(state.va),
+          "Aktuelle Hinterachslast 2-HA: " + stateLabel(state.ha),
+          "Tabellenprofil: " + (row ? (row.chassis + " / Typ " + row.typ) : "Bitte prüfen")
+        ];
+      }
+
+      function optionByKey(optionKey) {
+        return OPTIONEN.filter(function (item) { return item.key === optionKey; })[0] || null;
+      }
+
+      function requestTitle(inquiryType, option, stepIndex) {
+        if (inquiryType === "option" && option) return "Option " + option.key + ": " + option.name;
+        if (inquiryType === "no_leaf") return "Blattfederung nein / unsicher";
+        if (inquiryType === "help") return "Persönliche Beratung" + (stepNameByIndex(stepIndex) ? " – " + stepNameByIndex(stepIndex) : "");
+        return "Persönliche Beratung";
+      }
+
+      function buildSubject(inquiryType, option, stepIndex) {
+        if (inquiryType === "option" && option) {
+          return "Anfrage Fiat Ducato Auflastung - Option " + option.key + " - " + option.name;
+        }
+        if (inquiryType === "no_leaf") {
+          return "Rückfrage Fiat Ducato Auflastung - keine Blattfederung / unsicher";
+        }
+        return "Beratungswunsch Fiat Ducato Auflastung - Angaben unklar" + (stepNameByIndex(stepIndex) ? " - " + stepNameByIndex(stepIndex) : "");
+      }
+
+      function buildMessage(inquiryType, option, row, extra) {
+        extra = extra || {};
+        var target = option ? targetValues(row, option) : { zgg: null, va: null, ha: null };
+        var lines = ["Hallo ramto-Team,", ""];
+
+        if (inquiryType === "option" && option) {
+          lines = lines.concat([
+            "ich interessiere mich für eine Auflastung meines Fiat Ducato / Stellantis Wohnmobils.",
+            "",
+            "Ausgewählte Option:",
+            "Option " + option.key + ": " + option.name,
+            "Preis laut Konfigurator: " + price(AUFLASTUNG_CONFIG.prices[option.key]),
+            "Preis-/Paketinfo: " + (AUFLASTUNG_CONFIG.priceNotes[option.key] || ""),
+            "Enthalten laut Konfigurator: " + (AUFLASTUNG_CONFIG.priceIncludes[option.key] || []).join("; "),
+            "",
+            "Meine Fahrzeugdaten:"
+          ]);
+          lines = lines.concat(stateSummaryLines(row));
+          lines = lines.concat([
+            "",
+            "Angezeigte Auflastung:",
+            "Neues zGG: " + kg(target.zgg),
+            "Neue Vorderachslast VA: " + kg(target.va),
+            "Neue Hinterachslast HA: " + kg(target.ha),
+            "",
+            "Mir ist bewusst, dass die angegebene Tragkraft passende Räder/Reifen mit entsprechender Traglast voraussetzt. Bitte prüfen Sie auch passende Fiat-Felgen/Räder.",
+            "",
+            "Bitte senden Sie mir ein Angebot und teilen Sie mir mit, welche weiteren Daten oder Unterlagen benötigt werden."
+          ]);
+        } else if (inquiryType === "no_leaf") {
+          lines = lines.concat([
+            "ich habe den Auflastungs-Check genutzt, bin aber bei der Blattfederung nicht sicher bzw. mein Fahrzeug hat keine Blattfederung an der Hinterachse.",
+            "",
+            "Meine bisherigen Angaben:"
+          ]);
+          lines = lines.concat(stateSummaryLines(row));
+          lines = lines.concat([
+            "",
+            "Bitte teilen Sie mir mit, ob es trotzdem eine passende Lösung gibt und welche Fotos oder Fahrzeugdaten Sie benötigen."
+          ]);
+        } else {
+          lines = lines.concat([
+            "ich nutze den ramto Auflastungs-Check, bin mir aber bei einer Angabe unsicher oder finde die Information nicht.",
+            "",
+            "Unsicher bei: " + (stepNameByIndex(extra.stepIndex) || "nicht eindeutig"),
+            "",
+            "Meine bisherigen Angaben:"
+          ]);
+          lines = lines.concat(stateSummaryLines(row));
+          lines = lines.concat([
+            "",
+            "Bitte beraten Sie mich persönlich und teilen Sie mir mit, welche Daten, Fotos oder Unterlagen hilfreich sind."
+          ]);
+        }
+
+        if (extra.customerName || extra.customerPhone || extra.customerEmail || extra.customerAddress || extra.customerMessage) {
+          lines = lines.concat(["", "Kontaktdaten aus dem Formular:"]);
+          if (extra.customerName) lines.push("Name: " + extra.customerName);
+          if (extra.customerPhone) lines.push("Telefon: " + extra.customerPhone);
+          if (extra.customerEmail) lines.push("E-Mail: " + extra.customerEmail);
+          if (extra.customerAddress) lines.push("Adresse: " + extra.customerAddress);
+          if (extra.customerMessage) lines.push("Nachricht: " + extra.customerMessage);
+        }
+
+        lines = lines.concat(["", "Vielen Dank!"]);
+        return lines.join("\n");
+      }
+
+      function buildInquiryPayload(channel, inquiryType, option, row, extra) {
+        extra = extra || {};
+        var target = option ? targetValues(row, option) : { zgg: null, va: null, ha: null };
+        return {
+          writeToken: AUFLASTUNG_CONFIG.sheetWriteToken || "",
+          toolVersion: "6.0",
+          timestampClient: new Date().toISOString(),
+          sourcePage: window.location.href,
+          pageTitle: document.title || "",
+          userAgent: navigator.userAgent || "",
+          channel: channel,
+          inquiryType: inquiryType || "option",
+          requestTitle: requestTitle(inquiryType, option, extra.stepIndex),
+          optionKey: option ? option.key : "",
+          optionName: option ? option.name : "",
+          optionPrice: option ? price(AUFLASTUNG_CONFIG.prices[option.key]) : "",
+          leafSpring: leafLabel(),
+          currentZgg: state.zgg || "",
+          currentVa: state.va || "",
+          currentHa: state.ha || "",
+          chassis: row ? row.chassis : "",
+          vehicleType: row ? row.typ : "",
+          targetZgg: target.zgg || "",
+          targetVa: target.va || "",
+          targetHa: target.ha || "",
+          helpStep: stepNameByIndex(extra.stepIndex),
+          customerName: extra.customerName || "",
+          customerPhone: extra.customerPhone || "",
+          customerEmail: extra.customerEmail || "",
+          customerAddress: extra.customerAddress || "",
+          customerMessage: extra.customerMessage || "",
+          honeypot: extra.honeypot || "",
+          messageText: buildMessage(inquiryType, option, row, extra)
+        };
+      }
+
+      function saveInquiry(payload) {
+        var endpoint = AUFLASTUNG_CONFIG.sheetEndpoint || "";
+        if (!endpoint) {
+          if (window.console && console.warn) console.warn("ramto Auflastungs-Check: sheetEndpoint ist nicht konfiguriert.");
+          return Promise.resolve(false);
+        }
+
+        var body = JSON.stringify(payload || {});
+
+        if (window.fetch) {
+          return fetch(endpoint, {
+            method: "POST",
+            mode: "no-cors",
+            cache: "no-cache",
+            keepalive: true,
+            headers: { "Content-Type": "text/plain;charset=UTF-8" },
+            body: body
+          }).then(function () {
+            return true;
+          }).catch(function () {
+            if (navigator.sendBeacon) {
+              try {
+                var blob = new Blob([body], { type: "text/plain;charset=UTF-8" });
+                return navigator.sendBeacon(endpoint, blob);
+              } catch (error) {}
+            }
+            return false;
+          });
+        }
+
+        if (navigator.sendBeacon) {
+          try {
+            var beaconBlob = new Blob([body], { type: "text/plain;charset=UTF-8" });
+            return Promise.resolve(navigator.sendBeacon(endpoint, beaconBlob));
+          } catch (error) {}
+        }
+
+        return Promise.resolve(false);
+      }
+
+      function buildEmailHref(inquiryType, option, row, extra) {
+        return addCcToMailto("mailto:" + AUFLASTUNG_CONFIG.email, buildSubject(inquiryType, option, extra && extra.stepIndex), buildMessage(inquiryType, option, row, extra));
+      }
+
+      function buildWhatsAppHref(inquiryType, option, row, extra) {
+        var phone = cleanPhoneNumber(AUFLASTUNG_CONFIG.whatsappPhone);
+        if (!phone) return "";
+        return "https://wa.me/" + phone + "?text=" + encodeURIComponent(buildMessage(inquiryType, option, row, extra));
+      }
+
+      function renderContactActions(inquiryType, option, stepIndex) {
+        var optionAttr = option ? " data-option='" + escapeHtml(option.key) + "'" : "";
+        var stepAttr = stepIndex !== undefined && stepIndex !== null ? " data-help-step='" + escapeHtml(stepIndex) + "'" : "";
+        return "<button type='button' class='rfj-button rfj-button-primary rfj-contact-button' data-contact-channel='email' data-contact-type='" + escapeHtml(inquiryType) + "'" + optionAttr + stepAttr + ">Per E-Mail</button>" +
+          "<button type='button' class='rfj-button rfj-button-dark rfj-contact-button' data-contact-channel='whatsapp' data-contact-type='" + escapeHtml(inquiryType) + "'" + optionAttr + stepAttr + ">Per WhatsApp</button>" +
+          "<button type='button' class='rfj-button rfj-button-ghost rfj-contact-button' data-contact-channel='formular' data-contact-type='" + escapeHtml(inquiryType) + "'" + optionAttr + stepAttr + ">Per Formular</button>";
+      }
+
+      function renderHelpCards() {
+        steps.forEach(function (step, index) {
+          var card = step.querySelector(".rfj-question-card");
+          if (!card || card.querySelector(".rfj-help-card")) return;
+          var html = "<div class='rfj-help-card'>" +
+            "<strong>Sie sind sich nicht sicher oder finden den Wert nicht?</strong>" +
+            "<p>Kein Problem – wir beraten Sie gerne persönlich. Senden Sie uns einfach Ihre bisherigen Angaben, auf Wunsch auch mit Fotos von Fahrzeugschein, Typenschild oder Hinterachse.</p>" +
+            "<div class='rfj-contact-actions'>" + renderContactActions("help", null, index) + "</div>" +
+            "</div>";
+          card.insertAdjacentHTML("beforeend", html);
+        });
+      }
+
+      function showNotice(message) {
+        if (!contactNotice) return;
+        window.clearTimeout(noticeTimer);
+        contactNotice.textContent = message || "";
+        contactNotice.classList.toggle("is-visible", Boolean(message));
+        if (message) {
+          noticeTimer = window.setTimeout(function () {
+            contactNotice.classList.remove("is-visible");
+          }, 5200);
+        }
+      }
+
+      function modalSummaryHtml(inquiryType, option, row, stepIndex) {
+        var target = option ? targetValues(row, option) : { zgg: null, va: null, ha: null };
+        var html = "<strong>Zusammenfassung der Anfrage</strong>";
+        html += "<span>Art: " + escapeHtml(requestTitle(inquiryType, option, stepIndex)) + "</span>";
+        html += "<span>Blattfederung: " + escapeHtml(leafLabel()) + "</span>";
+        html += "<span>Aktuelle Werte: zGG " + escapeHtml(stateLabel(state.zgg)) + " · 1-VA " + escapeHtml(stateLabel(state.va)) + " · 2-HA " + escapeHtml(stateLabel(state.ha)) + "</span>";
+        if (row) html += "<span>Profil: " + escapeHtml(row.chassis + " / Typ " + row.typ) + "</span>";
+        if (option) html += "<span>Auflastung: zGG " + escapeHtml(kg(target.zgg)) + " · VA " + escapeHtml(kg(target.va)) + " · HA " + escapeHtml(kg(target.ha)) + "</span>";
+        return html;
+      }
+
+      function setFormStatus(message, isError) {
+        if (!contactStatus) return;
+        contactStatus.textContent = message || "";
+        contactStatus.classList.toggle("is-visible", Boolean(message));
+        contactStatus.classList.toggle("is-error", Boolean(message && isError));
+        contactStatus.classList.toggle("is-success", Boolean(message && !isError));
+      }
+
+      function openContactForm(inquiryType, option, row, stepIndex) {
+        if (!contactModal || !contactForm) return;
+        activeFormInquiry = {
+          inquiryType: inquiryType || "option",
+          optionKey: option ? option.key : "",
+          stepIndex: stepIndex
+        };
+
+        contactTitle.textContent = inquiryType === "option" && option ? "Anfrage per Formular – Option " + option.key : "Anfrage per Formular";
+        contactIntro.textContent = "Tragen Sie bitte mindestens Ihren Namen und eine Telefonnummer oder Adresse ein. Ihre bisherigen Angaben aus dem Auflastungs-Check werden automatisch mitgesendet.";
+        contactSummary.innerHTML = modalSummaryHtml(inquiryType, option, row, stepIndex);
+        setFormStatus("", false);
+        contactForm.reset();
+        contactModal.hidden = false;
+        contactModal.setAttribute("aria-hidden", "false");
+        window.setTimeout(function () {
+          var nameField = root.querySelector("#rfj-contact-name");
+          if (nameField && nameField.focus) nameField.focus();
+        }, 50);
+      }
+
+      function closeContactForm() {
+        if (!contactModal) return;
+        contactModal.hidden = true;
+        contactModal.setAttribute("aria-hidden", "true");
+        activeFormInquiry = null;
+        setFormStatus("", false);
+      }
+
+      function readFormExtra() {
+        return {
+          customerName: (root.querySelector("#rfj-contact-name") || {}).value || "",
+          customerPhone: (root.querySelector("#rfj-contact-phone") || {}).value || "",
+          customerEmail: (root.querySelector("#rfj-contact-email") || {}).value || "",
+          customerAddress: (root.querySelector("#rfj-contact-address") || {}).value || "",
+          customerMessage: (root.querySelector("#rfj-contact-message") || {}).value || "",
+          honeypot: (root.querySelector("#rfj-contact-hp") || {}).value || ""
+        };
+      }
+
+      function handleContactClick(button) {
+        var channel = button.getAttribute("data-contact-channel") || "email";
+        var inquiryType = button.getAttribute("data-contact-type") || "option";
+        var option = optionByKey(button.getAttribute("data-option"));
+        var stepIndexAttr = button.getAttribute("data-help-step");
+        var stepIndex = stepIndexAttr !== null && stepIndexAttr !== "" ? parseInt(stepIndexAttr, 10) : null;
+        var row = selectedRow();
+        var extra = { stepIndex: stepIndex };
+
+        if (channel === "formular") {
+          openContactForm(inquiryType, option, row, stepIndex);
+          trackEvent("form_button_clicked", trackingBase(option, row));
+          return;
+        }
+
+        var payload = buildInquiryPayload(channel, inquiryType, option, row, extra);
+        saveInquiry(payload);
+
+        if (channel === "email") {
+          trackEvent("email_button_clicked", trackingBase(option, row));
+          window.location.href = buildEmailHref(inquiryType, option, row, extra);
+          return;
+        }
+
+        if (channel === "whatsapp") {
+          trackEvent("whatsapp_button_clicked", trackingBase(option, row));
+          var whatsappHref = buildWhatsAppHref(inquiryType, option, row, extra);
+          if (!whatsappHref) {
+            showNotice("WhatsApp ist noch nicht konfiguriert. Bitte WhatsApp-Nummer in AUFLASTUNG_CONFIG.whatsappPhone eintragen. Als Alternative öffnet sich das Formular.");
+            openContactForm(inquiryType, option, row, stepIndex);
+            return;
+          }
+          window.open(whatsappHref, "_blank", "noopener");
+          showNotice("Falls WhatsApp nicht geöffnet wurde, nutzen Sie bitte E-Mail oder Formular als Alternative.");
+        }
+      }
+
       function addCcToMailto(baseUrl, subject, body) {
         return baseUrl +
           "?cc=" + encodeURIComponent(AUFLASTUNG_CONFIG.emailCc || "") +
@@ -1553,71 +2225,30 @@
       }
 
       function buildMailto(option, row) {
-        var target = targetValues(row, option);
-        var subject = "Anfrage Fiat Ducato Auflastung - Option " + option.key + " - " + option.name;
-        var bodyLines = [
-          "Hallo ramto-Team,",
-          "",
-          "ich interessiere mich für eine Auflastung meines Fiat Ducato / Stellantis Wohnmobils.",
-          "",
-          "Ausgewählte Option:",
-          "Option " + option.key + ": " + option.name,
-          "Preis laut Konfigurator: " + price(AUFLASTUNG_CONFIG.prices[option.key]),
-          "Preis-/Paketinfo: " + (AUFLASTUNG_CONFIG.priceNotes[option.key] || ""),
-          "Enthalten laut Konfigurator: " + (AUFLASTUNG_CONFIG.priceIncludes[option.key] || []).join("; "),
-          "",
-          "Meine Fahrzeugdaten:",
-          "Blattfederung Hinterachse: " + (state.leaf === true ? "Ja" : "Nein / nicht sicher"),
-          "Aktuelles zGG: " + kg(state.zgg),
-          "Aktuelle Vorderachslast 1-VA: " + kg(state.va),
-          "Aktuelle Hinterachslast 2-HA: " + kg(state.ha),
-          "Tabellenprofil: " + (row ? (row.chassis + " / Typ " + row.typ) : "Bitte prüfen"),
-          "",
-          "Angezeigte Auflastung:",
-          "Neues zGG: " + kg(target.zgg),
-          "Neue Vorderachslast VA: " + kg(target.va),
-          "Neue Hinterachslast HA: " + kg(target.ha),
-          "",
-          "Mir ist bewusst, dass die angegebene Tragkraft passende Räder/Reifen mit entsprechender Traglast voraussetzt. Bitte prüfen Sie auch passende Fiat-Felgen/Räder.",
-          "",
-          "Bitte senden Sie mir ein Angebot und teilen Sie mir mit, welche weiteren Daten oder Unterlagen benötigt werden.",
-          "",
-          "Vielen Dank!"
-        ];
-
-        return addCcToMailto("mailto:" + AUFLASTUNG_CONFIG.email, subject, bodyLines.join("\n"));
+        return buildEmailHref("option", option, row, {});
       }
 
       function buildNoLeafMailto() {
-        var subject = "Rückfrage Fiat Ducato Auflastung - keine Blattfederung / unsicher";
-        var body = [
-          "Hallo ramto-Team,",
-          "",
-          "ich habe die Auflastungs-Journey genutzt, bin aber bei der Blattfederung nicht sicher bzw. mein Fahrzeug hat keine Blattfederung an der Hinterachse.",
-          "",
-          "Bitte teilen Sie mir mit, ob es trotzdem eine passende Lösung gibt und welche Fotos oder Fahrzeugdaten Sie benötigen.",
-          "",
-          "Vielen Dank!"
-        ].join("\n");
-        return addCcToMailto("mailto:" + AUFLASTUNG_CONFIG.email, subject, body);
+        return buildEmailHref("no_leaf", null, selectedRow(), {});
       }
 
       function renderNoLeaf() {
         results.hidden = false;
         trackEvent("no_leaf_result_shown", { leaf_spring: "no_or_unsure" });
-        results.innerHTML = "" +
-          "<div class='rfj-result-head'>" +
-          "  <div>" +
-          "    <h3>Über diese Journey leider keine passende Auflastung</h3>" +
-          "    <p>Diese Berechnung ist für Fahrzeuge mit blattgefederter Hinterachse ausgelegt. Ohne Blattfederung kann hier kein konkretes Auflastungsangebot berechnet werden.</p>" +
-          "  </div>" +
-          "  <span class='rfj-pill'>Blattfederung: Nein / unsicher</span>" +
-          "</div>" +
-          "<div class='rfj-alert'><strong>Bei Unsicherheit:</strong> Senden Sie ramto Fotos der Hinterachse, des Fahrzeugscheins und des Typenschilds. Dann kann das Team prüfen, ob eine Alternative möglich ist.</div>" +
-          "<div class='rfj-option-actions' style='padding:0'>" +
-          "  <a class='rfj-button rfj-button-primary' data-track='mail-no-leaf' href='" + escapeHtml(buildNoLeafMailto()) + "'>Rückfrage senden</a>" +
-          "  <button type='button' class='rfj-button' data-restart>Neu starten</button>" +
-          "</div>";
+        var html = "";
+        html += "<div class='rfj-result-head'>";
+        html += "  <div>";
+        html += "    <h3>Über diese Journey leider keine passende Auflastung</h3>";
+        html += "    <p>Diese Berechnung ist für Fahrzeuge mit blattgefederter Hinterachse ausgelegt. Ohne Blattfederung kann hier kein konkretes Auflastungsangebot berechnet werden.</p>";
+        html += "  </div>";
+        html += "  <span class='rfj-pill'>Blattfederung: Nein / unsicher</span>";
+        html += "</div>";
+        html += "<div class='rfj-alert'><strong>Bei Unsicherheit:</strong> Senden Sie ramto Fotos der Hinterachse, des Fahrzeugscheins und des Typenschilds. Dann kann das Team prüfen, ob eine Alternative möglich ist.</div>";
+        html += "<div class='rfj-option-actions' style='padding:0'>";
+        html += renderContactActions("no_leaf", null, null);
+        html += "  <button type='button' class='rfj-button' data-restart>Neu starten</button>";
+        html += "</div>";
+        results.innerHTML = html;
         updateProgress();
         safeScrollTo(results);
       }
@@ -1644,7 +2275,6 @@
 
         OPTIONEN.forEach(function (option) {
           var target = targetValues(row, option);
-          var mailto = buildMailto(option, row);
           var productUrl = AUFLASTUNG_CONFIG.productUrls[option.key];
           var optionPrice = price(AUFLASTUNG_CONFIG.prices[option.key]);
 
@@ -1674,7 +2304,7 @@
           html += "  <div class='rfj-wheel-note'><strong>Räder/Reifen:</strong> Für die angezeigten Traglasten müssen Felgen und Reifen die entsprechende Tragkraft haben. ramto kann passende Fiat-Räder/Felgen prüfen und anbieten.</div>";
           html += "  <div class='rfj-option-actions'>";
           html += "    <a class='rfj-button rfj-button-dark' data-track='product' data-option='" + escapeHtml(option.key) + "' href='" + escapeHtml(productUrl) + "' target='_blank' rel='noopener'>Zur Produktseite</a>";
-          html += "    <a class='rfj-button rfj-button-primary' data-track='mail' data-option='" + escapeHtml(option.key) + "' href='" + escapeHtml(mailto) + "'>Anfragen</a>";
+          html += renderContactActions("option", option, null);
           html += "  </div>";
           html += "</article>";
         });
@@ -1784,6 +2414,19 @@
           return;
         }
 
+        var closeModalButton = closestMatch(target, "[data-close-modal]");
+        if (closeModalButton) {
+          closeContactForm();
+          return;
+        }
+
+        var contactButton = closestMatch(target, "[data-contact-channel]");
+        if (contactButton) {
+          event.preventDefault();
+          handleContactClick(contactButton);
+          return;
+        }
+
         var trackedLink = closestMatch(target, "[data-track]");
         if (trackedLink) {
           var trackType = trackedLink.getAttribute("data-track");
@@ -1833,7 +2476,64 @@
         event.preventDefault();
       });
 
+      if (contactForm) {
+        contactForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+          if (!activeFormInquiry) return;
+
+          var extra = readFormExtra();
+          extra.customerName = extra.customerName.replace(/^\s+|\s+$/g, "");
+          extra.customerPhone = extra.customerPhone.replace(/^\s+|\s+$/g, "");
+          extra.customerEmail = extra.customerEmail.replace(/^\s+|\s+$/g, "");
+          extra.customerAddress = extra.customerAddress.replace(/^\s+|\s+$/g, "");
+          extra.customerMessage = extra.customerMessage.replace(/^\s+|\s+$/g, "");
+          extra.stepIndex = activeFormInquiry.stepIndex;
+
+          var consent = root.querySelector("#rfj-contact-consent");
+          if (!extra.customerName) {
+            setFormStatus("Bitte geben Sie Ihren Namen ein.", true);
+            return;
+          }
+          if (!extra.customerPhone && !extra.customerAddress) {
+            setFormStatus("Bitte geben Sie mindestens eine Telefonnummer oder eine Adresse ein.", true);
+            return;
+          }
+          if (consent && !consent.checked) {
+            setFormStatus("Bitte bestätigen Sie, dass ramto Ihre Angaben zur Bearbeitung nutzen darf.", true);
+            return;
+          }
+          if (!AUFLASTUNG_CONFIG.sheetEndpoint) {
+            setFormStatus("Das Formular ist technisch noch nicht verbunden. Bitte zuerst AUFLASTUNG_CONFIG.sheetEndpoint eintragen oder E-Mail/WhatsApp nutzen.", true);
+            return;
+          }
+
+          var option = optionByKey(activeFormInquiry.optionKey);
+          var row = selectedRow();
+          var payload = buildInquiryPayload("formular", activeFormInquiry.inquiryType, option, row, extra);
+
+          if (contactSubmit) contactSubmit.disabled = true;
+          setFormStatus("Ihre Anfrage wird übertragen ...", false);
+
+          saveInquiry(payload).then(function (ok) {
+            if (contactSubmit) contactSubmit.disabled = false;
+            if (!ok) {
+              setFormStatus("Die Anfrage konnte nicht übertragen werden. Bitte versuchen Sie es erneut oder nutzen Sie E-Mail/WhatsApp.", true);
+              return;
+            }
+            trackEvent("form_submitted", trackingBase(option, row));
+            setFormStatus("Vielen Dank. Ihre Anfrage wurde übermittelt.", false);
+            showNotice("Formularanfrage wurde gespeichert und an ramto übermittelt.");
+            window.setTimeout(closeContactForm, 1400);
+          });
+        });
+      }
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && contactModal && !contactModal.hidden) closeContactForm();
+      });
+
       trackEvent("configurator_started", {});
+      renderHelpCards();
       renderCurrentChoices();
       updateProgress();
     })();
