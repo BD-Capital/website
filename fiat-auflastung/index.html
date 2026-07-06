@@ -10,7 +10,7 @@
 <!-- JIMDO-CODE START -->
 <!--
   ramto Fiat Ducato Auflastungs-Check
-  Version: 6.3
+  Version: 6.5
   Stand: 06.07.2026
   Einbau in Jimdo: Bei der Jimdo-Block-Datei alles kopieren. Bei der Vollversion nur den Bereich zwischen JIMDO-CODE START und JIMDO-CODE ENDE kopieren.
 
@@ -1470,7 +1470,7 @@
         // 1) Apps-Script-Code aus der separaten Datei in ein Google Sheet einfügen.
         // 2) Als Web-App bereitstellen.
         // 3) Die Web-App-URL hier eintragen.
-        sheetEndpoint: "https://script.google.com/a/macros/bd-capital.de/s/AKfycbwvqa0cuZKVjuC_Hyd7fcHa_eTTUEFnFX2Mvh8ViqPP3l60BWHwEV-1AoaUG1UHDBEG/exec",
+        sheetEndpoint: "https://script.google.com/macros/s/AKfycbyAAJAiK6L-Xfb8m3sGxdUWiST3eDYI5mV4oO13bHSzwCbAbrYqcdzyxfRjRO70ZmaU/exec",
 
         // Muss identisch mit WRITE_TOKEN im Apps Script sein. Kein echter Geheimschutz,
         // weil der Wert im Frontend sichtbar ist, aber gut gegen einfache Fremdposts/Bots.
@@ -1497,7 +1497,7 @@
         },
         priceIncludes: {
           A: [
-            "inkl. MwSt. ",
+            "inkl. MwSt.",
             "inkl. Montage bei ramto",
             "inkl. TÜV-Eintragung / TÜV-Abnahme wenn gewünscht",
             "Auflastung mit Typenschild inklusive, sofern technisch möglich",
@@ -2039,8 +2039,7 @@
         };
       }
 
-      function saveInquiry(payload, options) {
-        options = options || {};
+      function saveInquiry(payload) {
         var endpoint = AUFLASTUNG_CONFIG.sheetEndpoint || "";
         if (!endpoint) {
           if (window.console && console.warn) console.warn("ramto Auflastungs-Check: sheetEndpoint ist nicht konfiguriert.");
@@ -2048,20 +2047,19 @@
         }
 
         var body = JSON.stringify(payload || {});
-        var useKeepalive = options.keepalive !== false;
 
         if (window.fetch) {
           return fetch(endpoint, {
             method: "POST",
             mode: "no-cors",
             cache: "no-cache",
-            keepalive: useKeepalive,
+            keepalive: true,
             headers: { "Content-Type": "text/plain;charset=UTF-8" },
             body: body
           }).then(function () {
             return true;
           }).catch(function () {
-            if (useKeepalive && navigator.sendBeacon) {
+            if (navigator.sendBeacon) {
               try {
                 var blob = new Blob([body], { type: "text/plain;charset=UTF-8" });
                 return navigator.sendBeacon(endpoint, blob);
@@ -2071,7 +2069,7 @@
           });
         }
 
-        if (useKeepalive && navigator.sendBeacon) {
+        if (navigator.sendBeacon) {
           try {
             var beaconBlob = new Blob([body], { type: "text/plain;charset=UTF-8" });
             return Promise.resolve(navigator.sendBeacon(endpoint, beaconBlob));
@@ -2554,12 +2552,12 @@
           if (contactSubmit) contactSubmit.disabled = true;
           setFormStatus("Ihre Anfrage wird vorbereitet ...", false);
 
-          readSelectedPhotos().then(function (photos) {
-            extra.photos = photos;
-            var payload = buildInquiryPayload("formular", activeFormInquiry.inquiryType, option, row, extra);
-            setFormStatus("Ihre Anfrage wird übertragen ...", false);
-            return saveInquiry(payload, { keepalive: false });
-          }).then(function (ok) {
+          extra.photos = [];
+          var payload = buildInquiryPayload("formular", activeFormInquiry.inquiryType, option, row, extra);
+          payload.messageText = "";
+
+          setFormStatus("Ihre Anfrage wird übertragen ...", false);
+          saveInquiry(payload).then(function (ok) {
             if (contactSubmit) contactSubmit.disabled = false;
             if (!ok) {
               setFormStatus("Die Anfrage konnte nicht übertragen werden. Bitte versuchen Sie es erneut oder nutzen Sie E-Mail/WhatsApp.", true);
@@ -2571,7 +2569,7 @@
             window.setTimeout(closeContactForm, 1400);
           }).catch(function (error) {
             if (contactSubmit) contactSubmit.disabled = false;
-            setFormStatus(error && error.message ? error.message : "Die Fotos oder die Anfrage konnten nicht verarbeitet werden.", true);
+            setFormStatus(error && error.message ? error.message : "Die Anfrage konnte nicht verarbeitet werden.", true);
           });
         });
       }
