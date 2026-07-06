@@ -1,119 +1,2589 @@
-<!DOCTYPE html>
+<!doctype html>
 <html lang="de">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>BD Capital – Unternehmerisches Beteiligungskapital</title>
-  <link rel="stylesheet" href="styles.css" />
-  <script defer src="script.js"></script>
+  <meta charset="UTF-8">
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ramto Fiat Ducato Auflastungs-Check</title>
 </head>
 <body>
+<!-- JIMDO-CODE START -->
+<!--
+  ramto Fiat Ducato Auflastungs-Check
+  Version: 6.1
+  Stand: 06.07.2026
+  Einbau in Jimdo: Bei der Jimdo-Block-Datei alles kopieren. Bei der Vollversion nur den Bereich zwischen JIMDO-CODE START und JIMDO-CODE ENDE kopieren.
 
-  <!-- Navigation -->
-  <header class="header">
-    <div class="container nav-container">
-      <a href="#home" class="logo">
-        <img src="logo.jpg" alt="BD Capital Logo" />
-      </a>
+  Wichtige Anpassungsstellen:
+  - AUFLASTUNG_DATEN: Tabellenwerte / moegliche Kombinationen
+  - AUFLASTUNG_CONFIG.prices: Preise je Option
+  - AUFLASTUNG_CONFIG.productUrls / wheelUrl: Links
+  - Bilder liegen im Ordner images/ als webp: blattfeder.webp, zgg.webp, va.webp, ha.webp, option-a.webp, option-b.webp, option-c.webp
+  - Version 6: Kontaktwege E-Mail / WhatsApp / Formular, Google-Sheets-Logging fuer jede Anfrage, Formular-Mail nur bei Kanal Formular
+  - Wichtig: AUFLASTUNG_CONFIG.sheetEndpoint, sheetWriteToken und whatsappPhone vor Livegang eintragen
+-->
+<div id="ramto-fiat-journey" class="rfj">
+  <style>
+    #ramto-fiat-journey {
+      --rfj-orange: #E8720C;
+      --rfj-orange-dark: #c85d00;
+      --rfj-black: #000000;
+      --rfj-anthracite: #181818;
+      --rfj-white: #FFFFFF;
+      --rfj-bg: #FFFFFF;
+      --rfj-soft: #F6F6F6;
+      --rfj-soft-2: #EFEFEF;
+      --rfj-soft-orange: #FFF2E8;
+      --rfj-text: #111111;
+      --rfj-muted: #666666;
+      --rfj-border: #E2E2E2;
+      --rfj-success: #1d6f42;
+      --rfj-warning-bg: #FFF6ED;
+      --rfj-warning-text: #6B3500;
+      --rfj-radius: 18px;
+      --rfj-radius-sm: 13px;
+      --rfj-shadow: 0 18px 48px rgba(0, 0, 0, 0.12);
+      --rfj-shadow-soft: 0 10px 28px rgba(0, 0, 0, 0.08);
+      width: 100%;
+      max-width: 1180px;
+      margin: 0 auto;
+      color: var(--rfj-text);
+      font-family: Arial, Helvetica, sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-text-size-adjust: 100%;
+      text-size-adjust: 100%;
+    }
 
-      <nav class="nav" id="navbar">
-        <ul>
-          <li><a href="#home" class="active">Start</a></li>
-          <li><a href="#about">Über uns</a></li>
-          <li><a href="#approach">Unser Ansatz</a></li>
-          <li><a href="#faq">FAQ</a></li>
-          <li><a href="#contact">Kontakt</a></li>
-        </ul>
-      </nav>
+    #ramto-fiat-journey * {
+      box-sizing: border-box;
+    }
 
-      <!-- ✨ Updated Menu Icon -->
-      <button class="menu-toggle" id="menu-toggle">☰</button>
+    #ramto-fiat-journey a {
+      color: inherit;
+    }
 
+    #ramto-fiat-journey h2,
+    #ramto-fiat-journey h3,
+    #ramto-fiat-journey h4,
+    #ramto-fiat-journey h5,
+    #ramto-fiat-journey p {
+      margin-top: 0;
+    }
+
+    #ramto-fiat-journey .rfj-shell {
+      overflow: hidden;
+      background: var(--rfj-white);
+      border: 1px solid var(--rfj-border);
+      border-radius: 24px;
+      box-shadow: var(--rfj-shadow);
+    }
+
+    #ramto-fiat-journey .rfj-hero {
+      position: relative;
+      overflow: hidden;
+      padding: 34px 30px 28px;
+      background:
+        radial-gradient(circle at 95% 0%, rgba(232, 114, 12, 0.40), transparent 34%),
+        linear-gradient(135deg, var(--rfj-anthracite) 0%, #050505 100%);
+      color: var(--rfj-white);
+      border-bottom: 5px solid var(--rfj-orange);
+    }
+
+    #ramto-fiat-journey .rfj-hero::after {
+      content: "";
+      position: absolute;
+      width: 190px;
+      height: 190px;
+      right: -70px;
+      bottom: -95px;
+      border: 28px solid var(--rfj-orange);
+      border-radius: 50%;
+      opacity: 0.88;
+      pointer-events: none;
+    }
+
+    #ramto-fiat-journey .rfj-kicker {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 16px;
+      padding: 8px 13px;
+      border: 1px solid rgba(255, 255, 255, 0.18);
+      border-radius: 999px;
+      background: rgba(255, 255, 255, 0.08);
+      font-size: 13px;
+      font-weight: 800;
+      letter-spacing: 0.04em;
+      text-transform: uppercase;
+    }
+
+    #ramto-fiat-journey .rfj-kicker::before {
+      content: "";
+      display: inline-block;
+      width: 10px;
+      height: 10px;
+      border-radius: 50%;
+      background: var(--rfj-orange);
+    }
+
+    #ramto-fiat-journey .rfj-hero h2 {
+      position: relative;
+      z-index: 1;
+      max-width: 830px;
+      margin-bottom: 12px;
+      font-size: clamp(30px, 4vw, 48px);
+      line-height: 1.08;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+    }
+
+    #ramto-fiat-journey .rfj-hero p {
+      position: relative;
+      z-index: 1;
+      max-width: 850px;
+      margin-bottom: 0;
+      color: rgba(255, 255, 255, 0.83);
+      font-size: 17px;
+    }
+
+    #ramto-fiat-journey .rfj-progress-wrap {
+      padding: 22px 30px 0;
+      background: var(--rfj-white);
+    }
+
+    #ramto-fiat-journey .rfj-progress-meta {
+      display: flex;
+      justify-content: space-between;
+      gap: 14px;
+      margin-bottom: 10px;
+      color: var(--rfj-muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    #ramto-fiat-journey .rfj-progress {
+      height: 9px;
+      overflow: hidden;
+      border-radius: 999px;
+      background: var(--rfj-soft-2);
+    }
+
+    #ramto-fiat-journey .rfj-progress-bar {
+      width: 25%;
+      height: 100%;
+      border-radius: 999px;
+      background: var(--rfj-orange);
+      transition: width 0.25s ease;
+    }
+
+    #ramto-fiat-journey .rfj-form {
+      padding: 26px 30px 30px;
+      background: var(--rfj-white);
+    }
+
+    #ramto-fiat-journey .rfj-step {
+      display: none;
+      grid-template-columns: minmax(250px, 0.42fr) minmax(0, 0.58fr);
+      gap: 22px;
+      align-items: start;
+    }
+
+    #ramto-fiat-journey .rfj-step.is-active {
+      display: grid;
+    }
+
+    #ramto-fiat-journey .rfj-question-card,
+    #ramto-fiat-journey .rfj-image-slot,
+    #ramto-fiat-journey .rfj-result,
+    #ramto-fiat-journey .rfj-option-card {
+      border: 1px solid var(--rfj-border);
+      border-radius: var(--rfj-radius);
+      background: var(--rfj-white);
+    }
+
+    #ramto-fiat-journey .rfj-question-card {
+      min-width: 0;
+      padding: 26px;
+      box-shadow: var(--rfj-shadow-soft);
+    }
+
+    #ramto-fiat-journey .rfj-question-card h3 {
+      margin-bottom: 10px;
+      font-size: clamp(24px, 3vw, 34px);
+      line-height: 1.13;
+      font-weight: 900;
+      letter-spacing: -0.025em;
+    }
+
+    #ramto-fiat-journey .rfj-question-card p {
+      margin-bottom: 20px;
+      color: var(--rfj-muted);
+    }
+
+    #ramto-fiat-journey .rfj-image-slot {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      width: 100%;
+      height: auto;
+      min-height: 0;
+      align-self: start;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+      gap: 9px;
+      padding: 22px;
+      text-align: center;
+      color: var(--rfj-muted);
+      background:
+        linear-gradient(135deg, rgba(0, 0, 0, 0.72), rgba(24, 24, 24, 0.38)),
+        repeating-linear-gradient(135deg, #f3f3f3, #f3f3f3 12px, #e7e7e7 12px, #e7e7e7 24px);
+    }
+
+    #ramto-fiat-journey .rfj-image-slot::before {
+      content: "";
+      position: absolute;
+      inset: 14px;
+      border: 2px dashed rgba(255, 255, 255, 0.45);
+      border-radius: 15px;
+      pointer-events: none;
+    }
+
+    #ramto-fiat-journey .rfj-image-slot span {
+      position: relative;
+      z-index: 1;
+      display: inline-flex;
+      width: 58px;
+      height: 58px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 18px;
+      background: var(--rfj-orange);
+      color: var(--rfj-white);
+      font-size: 25px;
+      font-weight: 900;
+      box-shadow: 0 10px 22px rgba(0, 0, 0, 0.22);
+    }
+
+    #ramto-fiat-journey .rfj-image-slot strong,
+    #ramto-fiat-journey .rfj-image-slot small {
+      position: relative;
+      z-index: 1;
+      max-width: 270px;
+    }
+
+    #ramto-fiat-journey .rfj-image-slot strong {
+      color: var(--rfj-white);
+      font-size: 17px;
+    }
+
+    #ramto-fiat-journey .rfj-image-slot small {
+      color: rgba(255, 255, 255, 0.78);
+    }
+
+
+    #ramto-fiat-journey .rfj-image-slot.rfj-has-img,
+    #ramto-fiat-journey .rfj-option-image.rfj-has-img {
+      padding: 0;
+      background: var(--rfj-white);
+    }
+
+    #ramto-fiat-journey .rfj-image-slot.rfj-has-img::before,
+    #ramto-fiat-journey .rfj-option-image.rfj-has-img::after {
+      display: none;
+    }
+
+    #ramto-fiat-journey .rfj-select-label {
+      display: block;
+      margin: 0 0 9px;
+      color: var(--rfj-black);
+      font-size: 14px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    #ramto-fiat-journey .rfj-select-wrap {
+      position: relative;
+      width: 100%;
+    }
+
+    #ramto-fiat-journey .rfj-select-wrap::after {
+      content: "";
+      position: absolute;
+      right: 18px;
+      top: 50%;
+      width: 11px;
+      height: 11px;
+      border-right: 3px solid var(--rfj-orange);
+      border-bottom: 3px solid var(--rfj-orange);
+      transform: translateY(-65%) rotate(45deg);
+      pointer-events: none;
+    }
+
+    #ramto-fiat-journey .rfj-select {
+      width: 100%;
+      min-height: 62px;
+      padding: 15px 54px 15px 17px;
+      border: 2px solid var(--rfj-border);
+      border-radius: 15px;
+      appearance: none;
+      -webkit-appearance: none;
+      background: var(--rfj-white);
+      color: var(--rfj-black);
+      font: inherit;
+      font-size: 17px;
+      line-height: 1.25;
+      font-weight: 800;
+      cursor: pointer;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+
+    #ramto-fiat-journey .rfj-select:hover,
+    #ramto-fiat-journey .rfj-select:focus {
+      border-color: var(--rfj-orange);
+      box-shadow: 0 0 0 4px rgba(232, 114, 12, 0.13);
+    }
+
+    #ramto-fiat-journey .rfj-select:disabled {
+      opacity: 0.55;
+      cursor: not-allowed;
+      background: var(--rfj-soft);
+    }
+
+    #ramto-fiat-journey .rfj-select-hint {
+      min-height: 22px;
+      margin-top: 11px;
+      color: var(--rfj-muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    #ramto-fiat-journey .rfj-select-hint strong {
+      color: var(--rfj-black);
+    }
+
+    #ramto-fiat-journey .rfj-select-next {
+      display: none;
+      width: 100%;
+      margin-top: 14px;
+    }
+
+    #ramto-fiat-journey .rfj-choice-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin-top: 8px;
+    }
+
+    #ramto-fiat-journey .rfj-choice-grid-numbers {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    #ramto-fiat-journey .rfj-choice,
+    #ramto-fiat-journey .rfj-button {
+      appearance: none;
+      border: 1px solid var(--rfj-border);
+      border-radius: 14px;
+      font: inherit;
+      cursor: pointer;
+      transition: transform 0.15s ease, border-color 0.15s ease, background 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    #ramto-fiat-journey .rfj-choice {
+      position: relative;
+      min-height: 92px;
+      padding: 16px 16px 15px;
+      background: var(--rfj-white);
+      text-align: left;
+    }
+
+    #ramto-fiat-journey .rfj-choice::after {
+      content: "›";
+      position: absolute;
+      right: 15px;
+      top: 15px;
+      width: 28px;
+      height: 28px;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--rfj-soft);
+      color: var(--rfj-orange);
+      font-size: 24px;
+      line-height: 1;
+      font-weight: 900;
+    }
+
+    #ramto-fiat-journey .rfj-choice strong {
+      display: block;
+      padding-right: 34px;
+      margin-bottom: 4px;
+      color: var(--rfj-black);
+      font-size: 17px;
+      line-height: 1.25;
+    }
+
+    #ramto-fiat-journey .rfj-choice small {
+      display: block;
+      color: var(--rfj-muted);
+      line-height: 1.38;
+    }
+
+    #ramto-fiat-journey .rfj-choice .rfj-number {
+      display: block;
+      padding-right: 34px;
+      margin-bottom: 3px;
+      color: var(--rfj-black);
+      font-size: 26px;
+      line-height: 1.1;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+
+    #ramto-fiat-journey .rfj-choice:hover,
+    #ramto-fiat-journey .rfj-choice:focus-visible,
+    #ramto-fiat-journey .rfj-button:hover,
+    #ramto-fiat-journey .rfj-button:focus-visible {
+      transform: translateY(-1px);
+      border-color: var(--rfj-orange);
+      box-shadow: 0 0 0 4px rgba(232, 114, 12, 0.13);
+      outline: none;
+    }
+
+    #ramto-fiat-journey .rfj-choice.is-selected {
+      border-color: var(--rfj-orange);
+      background: var(--rfj-soft-orange);
+      box-shadow: 0 0 0 4px rgba(232, 114, 12, 0.14);
+    }
+
+    #ramto-fiat-journey .rfj-step-note {
+      display: inline-flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 18px;
+      padding: 10px 12px;
+      border-radius: 999px;
+      background: var(--rfj-soft);
+      color: var(--rfj-muted);
+      font-size: 13px;
+      font-weight: 800;
+    }
+
+    #ramto-fiat-journey .rfj-step-note::before {
+      content: "";
+      width: 9px;
+      height: 9px;
+      border-radius: 50%;
+      background: var(--rfj-orange);
+    }
+
+    #ramto-fiat-journey .rfj-error {
+      display: none;
+      margin-top: 16px;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: var(--rfj-warning-bg);
+      color: var(--rfj-warning-text);
+      font-weight: 800;
+    }
+
+    #ramto-fiat-journey .rfj-error.is-visible {
+      display: block;
+    }
+
+    #ramto-fiat-journey .rfj-nav {
+      display: flex;
+      justify-content: space-between;
+      gap: 12px;
+      margin-top: 22px;
+    }
+
+    #ramto-fiat-journey .rfj-button {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      min-height: 48px;
+      padding: 13px 18px;
+      text-decoration: none;
+      font-weight: 900;
+      background: var(--rfj-white);
+      color: var(--rfj-black);
+    }
+
+    #ramto-fiat-journey .rfj-button-primary {
+      border-color: var(--rfj-orange);
+      background: var(--rfj-orange);
+      color: var(--rfj-white);
+    }
+
+    #ramto-fiat-journey .rfj-button-dark {
+      border-color: var(--rfj-black);
+      background: var(--rfj-black);
+      color: var(--rfj-white);
+    }
+
+    #ramto-fiat-journey .rfj-button-ghost {
+      background: var(--rfj-soft);
+    }
+
+    #ramto-fiat-journey .rfj-button[disabled] {
+      opacity: 0.42;
+      cursor: not-allowed;
+      transform: none;
+      box-shadow: none;
+      border-color: var(--rfj-border);
+    }
+
+    #ramto-fiat-journey .rfj-result {
+      margin-top: 26px;
+      padding: 26px;
+      box-shadow: var(--rfj-shadow);
+    }
+
+    #ramto-fiat-journey .rfj-result[hidden] {
+      display: none;
+    }
+
+    #ramto-fiat-journey .rfj-result-head {
+      display: grid;
+      grid-template-columns: minmax(0, 1fr) auto;
+      gap: 16px;
+      align-items: flex-start;
+      margin-bottom: 18px;
+      padding-bottom: 18px;
+      border-bottom: 1px solid var(--rfj-border);
+    }
+
+    #ramto-fiat-journey .rfj-result-head h3 {
+      margin-bottom: 7px;
+      font-size: clamp(26px, 3vw, 38px);
+      line-height: 1.1;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+    }
+
+    #ramto-fiat-journey .rfj-result-head p {
+      margin-bottom: 0;
+      color: var(--rfj-muted);
+    }
+
+    #ramto-fiat-journey .rfj-pill {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      white-space: nowrap;
+      gap: 8px;
+      border-radius: 999px;
+      padding: 10px 13px;
+      background: var(--rfj-anthracite);
+      color: var(--rfj-white);
+      font-size: 13px;
+      font-weight: 900;
+    }
+
+    #ramto-fiat-journey .rfj-alert {
+      margin: 0 0 18px;
+      padding: 14px 16px;
+      border: 1px solid rgba(232, 114, 12, 0.28);
+      border-left: 5px solid var(--rfj-orange);
+      border-radius: 14px;
+      background: var(--rfj-warning-bg);
+      color: var(--rfj-warning-text);
+    }
+
+    #ramto-fiat-journey .rfj-alert strong {
+      display: block;
+      margin-bottom: 4px;
+      color: var(--rfj-black);
+    }
+
+    #ramto-fiat-journey .rfj-options {
+      display: grid;
+      gap: 20px;
+    }
+
+    #ramto-fiat-journey .rfj-option-card {
+      overflow: hidden;
+      box-shadow: var(--rfj-shadow-soft);
+    }
+
+    #ramto-fiat-journey .rfj-option-heading {
+      display: flex;
+      align-items: flex-start;
+      gap: 14px;
+      padding: 21px 22px 18px;
+      background: var(--rfj-white);
+      border-bottom: 1px solid var(--rfj-border);
+    }
+
+    #ramto-fiat-journey .rfj-letter {
+      flex: 0 0 auto;
+      display: inline-flex;
+      width: 42px;
+      height: 42px;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      background: var(--rfj-orange);
+      color: var(--rfj-white);
+      font-size: 19px;
+      font-weight: 900;
+    }
+
+    #ramto-fiat-journey .rfj-option-heading h4 {
+      margin: 0 0 4px;
+      font-size: clamp(22px, 2.6vw, 30px);
+      line-height: 1.13;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+
+    #ramto-fiat-journey .rfj-option-heading p {
+      margin-bottom: 0;
+      color: var(--rfj-muted);
+    }
+
+    #ramto-fiat-journey .rfj-option-main {
+      display: grid;
+      grid-template-columns: minmax(240px, 0.95fr) minmax(170px, 0.58fr) minmax(250px, 0.82fr);
+      gap: 16px;
+      align-items: start;
+      padding: 20px 22px 18px;
+      background: var(--rfj-white);
+    }
+
+    #ramto-fiat-journey .rfj-option-image {
+      position: relative;
+      aspect-ratio: 4 / 3;
+      width: 100%;
+      height: auto;
+      min-height: 0;
+      align-self: start;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      overflow: hidden;
+      border: 1px solid var(--rfj-border);
+      border-radius: 16px;
+      padding: 18px;
+      text-align: center;
+      color: rgba(255, 255, 255, 0.83);
+      background:
+        linear-gradient(135deg, rgba(0, 0, 0, 0.78), rgba(24, 24, 24, 0.38)),
+        repeating-linear-gradient(135deg, #eeeeee, #eeeeee 12px, #dfdfdf 12px, #dfdfdf 24px);
+      font-weight: 800;
+    }
+
+    #ramto-fiat-journey .rfj-option-image::after {
+      content: "";
+      position: absolute;
+      inset: 12px;
+      border: 2px dashed rgba(255, 255, 255, 0.42);
+      border-radius: 13px;
+      pointer-events: none;
+    }
+
+    #ramto-fiat-journey .rfj-option-image,
+    #ramto-fiat-journey .rfj-kpi-stack,
+    #ramto-fiat-journey .rfj-price-box {
+      min-width: 0;
+      overflow-wrap: anywhere;
+    }
+
+    #ramto-fiat-journey .rfj-image-slot > img,
+    #ramto-fiat-journey .rfj-option-image > img {
+      position: absolute;
+      inset: 0;
+      z-index: 0;
+      display: block;
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+    }
+
+    #ramto-fiat-journey .rfj-image-slot > :not(img),
+    #ramto-fiat-journey .rfj-option-image > :not(img) {
+      position: relative;
+      z-index: 1;
+    }
+
+    #ramto-fiat-journey .rfj-kpi-stack {
+      display: grid;
+      gap: 10px;
+    }
+
+    #ramto-fiat-journey .rfj-load-box {
+      border: 1px solid var(--rfj-border);
+      border-radius: 15px;
+      padding: 14px 14px 13px;
+      background: var(--rfj-soft);
+    }
+
+    #ramto-fiat-journey .rfj-load-box span {
+      display: block;
+      margin-bottom: 3px;
+      color: var(--rfj-muted);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    #ramto-fiat-journey .rfj-load-box strong {
+      display: block;
+      color: var(--rfj-black);
+      font-size: clamp(21px, 2.2vw, 24px);
+      line-height: 1.1;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+
+    #ramto-fiat-journey .rfj-price-box {
+      display: flex;
+      flex-direction: column;
+      padding: 16px;
+      border-radius: 16px;
+      border: 1px solid rgba(232, 114, 12, 0.42);
+      background: var(--rfj-soft-orange);
+    }
+
+    #ramto-fiat-journey .rfj-price-box span {
+      color: var(--rfj-muted);
+      font-size: 12px;
+      font-weight: 900;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+    }
+
+    #ramto-fiat-journey .rfj-price-box strong {
+      display: block;
+      margin: 2px 0 10px;
+      color: var(--rfj-black);
+      font-size: clamp(25px, 3vw, 32px);
+      line-height: 1.05;
+      font-weight: 900;
+      letter-spacing: -0.03em;
+    }
+
+    #ramto-fiat-journey .rfj-price-box p {
+      margin: 0 0 10px;
+      color: var(--rfj-warning-text);
+      font-size: 14px;
+      font-weight: 800;
+    }
+
+    #ramto-fiat-journey .rfj-price-box ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--rfj-muted);
+      font-size: 14px;
+    }
+
+    #ramto-fiat-journey .rfj-price-box li + li {
+      margin-top: 5px;
+    }
+
+    #ramto-fiat-journey .rfj-procon-full {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 16px;
+      padding: 18px 22px 22px;
+      background: #fbfbfb;
+      border-top: 1px solid var(--rfj-border);
+    }
+
+    #ramto-fiat-journey .rfj-procon-box {
+      border: 1px solid var(--rfj-border);
+      border-radius: 15px;
+      padding: 15px 16px;
+      background: var(--rfj-white);
+    }
+
+    #ramto-fiat-journey .rfj-procon-box h5 {
+      margin: 0 0 9px;
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    #ramto-fiat-journey .rfj-procon-box ul {
+      margin: 0;
+      padding-left: 18px;
+      color: var(--rfj-muted);
+    }
+
+    #ramto-fiat-journey .rfj-procon-box li + li {
+      margin-top: 6px;
+    }
+
+    #ramto-fiat-journey .rfj-wheel-note {
+      margin: 0 22px 18px;
+      padding: 13px 15px;
+      border-radius: 14px;
+      background: var(--rfj-anthracite);
+      color: rgba(255, 255, 255, 0.83);
+      font-size: 14px;
+    }
+
+    #ramto-fiat-journey .rfj-wheel-note strong {
+      color: var(--rfj-white);
+    }
+
+    #ramto-fiat-journey .rfj-option-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      padding: 0 22px 22px;
+    }
+
+    #ramto-fiat-journey .rfj-summary-list {
+      display: grid;
+      gap: 7px;
+      margin-top: 18px;
+      padding: 14px 16px;
+      border-radius: 14px;
+      background: var(--rfj-soft);
+      color: var(--rfj-muted);
+      font-size: 14px;
+    }
+
+    #ramto-fiat-journey .rfj-summary-list strong {
+      color: var(--rfj-black);
+    }
+
+    #ramto-fiat-journey .rfj-help-card {
+      margin-top: 20px;
+      padding: 16px;
+      border: 1px solid rgba(232, 114, 12, 0.24);
+      border-radius: 15px;
+      background: var(--rfj-soft-orange);
+    }
+
+    #ramto-fiat-journey .rfj-help-card strong {
+      display: block;
+      margin-bottom: 5px;
+      color: var(--rfj-black);
+      font-size: 16px;
+      font-weight: 900;
+    }
+
+    #ramto-fiat-journey .rfj-help-card p {
+      margin-bottom: 12px;
+      color: var(--rfj-warning-text);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    #ramto-fiat-journey .rfj-contact-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+
+    #ramto-fiat-journey .rfj-contact-actions .rfj-button,
+    #ramto-fiat-journey .rfj-option-actions .rfj-contact-button {
+      flex: 1 1 145px;
+    }
+
+    #ramto-fiat-journey .rfj-button-small {
+      min-height: 44px;
+      padding: 11px 13px;
+      font-size: 14px;
+    }
+
+    #ramto-fiat-journey .rfj-contact-notice {
+      position: fixed;
+      left: 50%;
+      bottom: 22px;
+      z-index: 99999;
+      max-width: min(520px, calc(100vw - 28px));
+      padding: 13px 16px;
+      border-radius: 14px;
+      background: var(--rfj-anthracite);
+      color: var(--rfj-white);
+      box-shadow: var(--rfj-shadow);
+      font-size: 14px;
+      font-weight: 800;
+      transform: translate(-50%, 18px);
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.18s ease, transform 0.18s ease;
+    }
+
+    #ramto-fiat-journey .rfj-contact-notice.is-visible {
+      opacity: 1;
+      transform: translate(-50%, 0);
+    }
+
+    #ramto-fiat-journey .rfj-modal[hidden] {
+      display: none;
+    }
+
+    #ramto-fiat-journey .rfj-modal {
+      position: fixed;
+      inset: 0;
+      z-index: 99998;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 18px;
+    }
+
+    #ramto-fiat-journey .rfj-modal-backdrop {
+      position: absolute;
+      inset: 0;
+      background: rgba(0, 0, 0, 0.58);
+    }
+
+    #ramto-fiat-journey .rfj-modal-panel {
+      position: relative;
+      z-index: 1;
+      width: 100%;
+      max-width: 760px;
+      max-height: 90vh;
+      overflow: auto;
+      padding: 26px;
+      border-radius: 22px;
+      background: var(--rfj-white);
+      box-shadow: var(--rfj-shadow);
+    }
+
+    #ramto-fiat-journey .rfj-modal-close {
+      position: absolute;
+      top: 14px;
+      right: 14px;
+      width: 42px;
+      height: 42px;
+      border: 1px solid var(--rfj-border);
+      border-radius: 50%;
+      background: var(--rfj-soft);
+      color: var(--rfj-black);
+      font-size: 26px;
+      line-height: 1;
+      font-weight: 900;
+      cursor: pointer;
+    }
+
+    #ramto-fiat-journey .rfj-modal-panel h3 {
+      max-width: 620px;
+      margin: 0 50px 8px 0;
+      font-size: clamp(24px, 3vw, 34px);
+      line-height: 1.12;
+      font-weight: 900;
+      letter-spacing: -0.02em;
+    }
+
+    #ramto-fiat-journey .rfj-modal-panel > p {
+      margin-bottom: 14px;
+      color: var(--rfj-muted);
+    }
+
+    #ramto-fiat-journey .rfj-modal-summary {
+      display: grid;
+      gap: 5px;
+      margin: 0 0 16px;
+      padding: 13px 15px;
+      border-radius: 14px;
+      background: var(--rfj-soft);
+      color: var(--rfj-muted);
+      font-size: 14px;
+    }
+
+    #ramto-fiat-journey .rfj-modal-summary strong {
+      color: var(--rfj-black);
+    }
+
+    #ramto-fiat-journey .rfj-form-grid {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 14px;
+    }
+
+    #ramto-fiat-journey .rfj-field {
+      display: block;
+      min-width: 0;
+    }
+
+    #ramto-fiat-journey .rfj-field-full {
+      grid-column: 1 / -1;
+    }
+
+    #ramto-fiat-journey .rfj-field span {
+      display: block;
+      margin-bottom: 7px;
+      color: var(--rfj-black);
+      font-size: 13px;
+      font-weight: 900;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+    }
+
+    #ramto-fiat-journey .rfj-input,
+    #ramto-fiat-journey .rfj-textarea {
+      width: 100%;
+      border: 2px solid var(--rfj-border);
+      border-radius: 13px;
+      background: var(--rfj-white);
+      color: var(--rfj-black);
+      font: inherit;
+      font-size: 16px;
+      outline: none;
+      transition: border-color 0.15s ease, box-shadow 0.15s ease;
+    }
+
+    #ramto-fiat-journey .rfj-input {
+      min-height: 52px;
+      padding: 12px 13px;
+    }
+
+    #ramto-fiat-journey .rfj-textarea {
+      min-height: 112px;
+      padding: 12px 13px;
+      resize: vertical;
+    }
+
+    #ramto-fiat-journey .rfj-input:focus,
+    #ramto-fiat-journey .rfj-textarea:focus {
+      border-color: var(--rfj-orange);
+      box-shadow: 0 0 0 4px rgba(232, 114, 12, 0.13);
+    }
+
+    #ramto-fiat-journey .rfj-consent {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+      margin-top: 14px;
+      color: var(--rfj-muted);
+      font-size: 14px;
+      font-weight: 700;
+    }
+
+    #ramto-fiat-journey .rfj-consent input {
+      flex: 0 0 auto;
+      width: 18px;
+      height: 18px;
+      margin-top: 2px;
+      accent-color: var(--rfj-orange);
+    }
+
+    #ramto-fiat-journey .rfj-form-status {
+      display: none;
+      margin-top: 14px;
+      padding: 12px 14px;
+      border-radius: 13px;
+      font-weight: 800;
+    }
+
+    #ramto-fiat-journey .rfj-form-status.is-visible {
+      display: block;
+    }
+
+    #ramto-fiat-journey .rfj-form-status.is-success {
+      background: #EAF7EF;
+      color: var(--rfj-success);
+    }
+
+    #ramto-fiat-journey .rfj-form-status.is-error {
+      background: var(--rfj-warning-bg);
+      color: var(--rfj-warning-text);
+    }
+
+    #ramto-fiat-journey .rfj-modal-actions {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+      justify-content: flex-end;
+      margin-top: 16px;
+    }
+
+    #ramto-fiat-journey .rfj-hp {
+      position: absolute;
+      left: -9999px;
+      width: 1px;
+      height: 1px;
+      opacity: 0;
+    }
+
+    @media (max-width: 1060px) {
+      #ramto-fiat-journey .rfj-option-main {
+        grid-template-columns: minmax(230px, 1fr) minmax(220px, 1fr);
+      }
+
+      #ramto-fiat-journey .rfj-price-box {
+        grid-column: 1 / -1;
+      }
+    }
+
+    @media (max-width: 780px) {
+      #ramto-fiat-journey {
+        max-width: 100%;
+      }
+
+      #ramto-fiat-journey .rfj-step,
+      #ramto-fiat-journey .rfj-result-head,
+      #ramto-fiat-journey .rfj-option-main,
+      #ramto-fiat-journey .rfj-procon-full {
+        grid-template-columns: 1fr;
+      }
+
+      #ramto-fiat-journey .rfj-choice-grid,
+      #ramto-fiat-journey .rfj-choice-grid-numbers {
+        grid-template-columns: 1fr;
+      }
+
+      #ramto-fiat-journey .rfj-select-next {
+        display: inline-flex;
+      }
+
+      #ramto-fiat-journey .rfj-price-box {
+        grid-column: auto;
+      }
+
+      #ramto-fiat-journey .rfj-hero,
+      #ramto-fiat-journey .rfj-progress-wrap,
+      #ramto-fiat-journey .rfj-form,
+      #ramto-fiat-journey .rfj-result {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      #ramto-fiat-journey .rfj-option-heading,
+      #ramto-fiat-journey .rfj-option-main,
+      #ramto-fiat-journey .rfj-procon-full,
+      #ramto-fiat-journey .rfj-option-actions {
+        padding-left: 18px;
+        padding-right: 18px;
+      }
+
+      #ramto-fiat-journey .rfj-wheel-note {
+        margin-left: 18px;
+        margin-right: 18px;
+      }
+    }
+
+    @media (max-width: 640px) {
+      #ramto-fiat-journey {
+        font-size: 17px;
+      }
+
+      #ramto-fiat-journey .rfj-shell {
+        border-radius: 16px;
+        box-shadow: none;
+      }
+
+      #ramto-fiat-journey .rfj-hero {
+        padding: 26px 18px 22px;
+      }
+
+      #ramto-fiat-journey .rfj-hero h2 {
+        font-size: 30px;
+        line-height: 1.08;
+      }
+
+      #ramto-fiat-journey .rfj-hero p {
+        font-size: 16px;
+      }
+
+      #ramto-fiat-journey .rfj-progress-wrap {
+        padding-top: 18px;
+      }
+
+      #ramto-fiat-journey .rfj-progress-meta {
+        flex-direction: column;
+        gap: 4px;
+        font-size: 15px;
+      }
+
+      #ramto-fiat-journey .rfj-form {
+        padding-top: 22px;
+        padding-bottom: 24px;
+      }
+
+      #ramto-fiat-journey .rfj-step {
+        gap: 16px;
+      }
+
+      #ramto-fiat-journey .rfj-question-card {
+        padding: 20px;
+        border-radius: 16px;
+      }
+
+      #ramto-fiat-journey .rfj-question-card h3 {
+        font-size: 26px;
+        line-height: 1.12;
+      }
+
+      #ramto-fiat-journey .rfj-question-card p {
+        font-size: 16px;
+      }
+
+      #ramto-fiat-journey .rfj-image-slot,
+      #ramto-fiat-journey .rfj-option-image {
+        aspect-ratio: 4 / 3;
+        min-height: 0;
+        padding: 18px;
+      }
+
+      #ramto-fiat-journey .rfj-select {
+        min-height: 66px;
+        padding-top: 16px;
+        padding-bottom: 16px;
+        font-size: 18px;
+      }
+
+      #ramto-fiat-journey .rfj-select-hint {
+        font-size: 15px;
+        line-height: 1.45;
+      }
+
+      #ramto-fiat-journey .rfj-nav,
+      #ramto-fiat-journey .rfj-option-actions,
+      #ramto-fiat-journey .rfj-contact-actions,
+      #ramto-fiat-journey .rfj-modal-actions {
+        flex-direction: column;
+      }
+
+      #ramto-fiat-journey .rfj-form-grid {
+        grid-template-columns: 1fr;
+      }
+
+      #ramto-fiat-journey .rfj-modal {
+        padding: 10px;
+      }
+
+      #ramto-fiat-journey .rfj-modal-panel {
+        padding: 22px 16px 18px;
+        border-radius: 16px;
+      }
+
+      #ramto-fiat-journey .rfj-button {
+        width: 100%;
+        min-height: 58px;
+        font-size: 16px;
+      }
+
+      #ramto-fiat-journey .rfj-result {
+        margin-top: 20px;
+        padding: 18px 14px;
+        border-radius: 16px;
+      }
+
+      #ramto-fiat-journey .rfj-result-head {
+        gap: 10px;
+      }
+
+      #ramto-fiat-journey .rfj-result-head h3 {
+        font-size: 28px;
+      }
+
+      #ramto-fiat-journey .rfj-pill {
+        width: 100%;
+        white-space: normal;
+      }
+
+      #ramto-fiat-journey .rfj-option-heading {
+        padding-top: 18px;
+      }
+
+      #ramto-fiat-journey .rfj-option-heading h4 {
+        font-size: 24px;
+      }
+
+      #ramto-fiat-journey .rfj-load-box strong {
+        font-size: 25px;
+      }
+
+      #ramto-fiat-journey .rfj-price-box strong {
+        font-size: 30px;
+      }
+
+      #ramto-fiat-journey .rfj-procon-box ul,
+      #ramto-fiat-journey .rfj-price-box ul {
+        padding-left: 20px;
+      }
+    }
+  </style>
+
+  <div class="rfj-shell">
+    <div class="rfj-hero">
+      <div class="rfj-kicker">ramto Auflastungs-Check</div>
+      <h2>Fiat Ducato Auflastung schnell prüfen</h2>
+      <p>Wählen Sie Schritt für Schritt die eingetragenen Werte aus Fahrzeugschein oder Typenschild. Am Ende sehen Sie passende ramto-Lösungen mit möglichen neuen Achslasten und Gesamtgewichten.</p>
     </div>
-  </header>
 
-  <!-- Hero -->
-  <section class="hero" id="home">
-    <div class="container">
-      <div class="hero-content">
-        <h1>Wir bewahren unternehmerisches Lebenswerk und positionieren für langfristigen Erfolg.</h1>
-        <p>BD Capital ist eine unternehmerische Beteiligungsgesellschaft, die Unternehmen in Zeiten des Wandels begleitet — mit Fokus auf Nachhaltigkeit, Kontinuität und operativer Exzellenz.</p>
-        <p class="hero-cta"><a href="#contact" class="btn">Kontaktieren Sie uns</a></p>
+    <div class="rfj-progress-wrap">
+      <div class="rfj-progress-meta">
+        <span id="rfj-step-label">Schritt 1 von 4</span>
+        <span id="rfj-step-name">Hinterachse prüfen</span>
+      </div>
+      <div class="rfj-progress" aria-hidden="true">
+        <div id="rfj-progress-bar" class="rfj-progress-bar"></div>
       </div>
     </div>
-  </section>
 
-  <!-- Über uns -->
-  <section id="about" class="section light">
-    <div class="container">
-      <h2>Über BD Capital</h2>
-      <p>BD Capital wurde gegründet, um Lebenswerke zu bewahren – in einer Zeit, in der Wandel schneller und tiefgreifender geworden ist. Technologie, Fachkräftemangel, Lieferketten-Probleme und Regulierungen stellen Unternehmen vor neue Herausforderungen.</p>
-      <p>Wir unterstützen Inhaber bei der Unternehmensnachfolge, sorgen für eine stabile Übergabe und arbeiten eng mit Management und Belegschaft zusammen, um Werte und Kultur zu erhalten.</p>
-      <p>Unser Team bringt Erfahrung aus operativer Unternehmensführung, Beratung und nachhaltiger Entwicklung mit. Transparenz, Verlässlichkeit und partnerschaftliches Vorgehen sind uns zentral.</p>
-    </div>
-  </section>
+    <form id="rfj-form" class="rfj-form" novalidate>
+      <section class="rfj-step is-active" data-step="0" data-name="Hinterachse prüfen">
+        <div class="rfj-image-slot rfj-has-img">
+          <img src="images/blattfeder.webp" alt="Beispielbild: Blattfederung an der Hinterachse erkennen" loading="lazy">
+        </div>
+        <div class="rfj-question-card">
+          <h3>Hat Ihr Fahrzeug eine Blattfederung an der Hinterachse?</h3>
+          <p>Die Auflastungslösungen sind für Fiat Ducato / Citroën Jumper / Peugeot Boxer mit blattgefederter Hinterachse ausgelegt. Die Blattfedern erkennen Sie an mehreren übereinanderliegenden Federblättern an der Hinterachse.</p>
+          <label class="rfj-select-label" for="rfj-leaf-select">Bitte auswählen</label>
+          <div class="rfj-select-wrap">
+            <select id="rfj-leaf-select" class="rfj-select" aria-label="Blattfederung auswählen">
+              <option value="" disabled selected>Blattfederung auswählen</option>
+              <option value="yes">Ja, Blattfederung an der Hinterachse vorhanden</option>
+              <option value="no">Nein / nicht sicher</option>
+            </select>
+          </div>
+          <div id="rfj-leaf-help" class="rfj-select-hint">Nach der Auswahl geht es automatisch weiter.</div>
+          <button type="button" class="rfj-button rfj-button-primary rfj-select-next" data-continue="leaf">Auswahl übernehmen</button>
+          <div class="rfj-error" data-error></div>
+        </div>
+      </section>
 
-  <!-- Unser Ansatz -->
-  <section id="approach" class="section dark">
-    <div class="container">
-      <h2>Unser Ansatz</h2>
-      <p>BD Capital steht für unternehmerisches Beteiligungskapital mit langfristiger Perspektive. Unser Ziel ist es nicht, kurzfristige Gewinne zu realisieren, sondern dauerhafte Werte zu schaffen. Dabei stellen wir stets den nachhaltigen Unternehmenserfolg und das Wohl der Mitarbeiter in den Mittelpunkt.</p>
-    <p>Wir investieren in mittelständische Unternehmen in Umbruch- oder Nachfolgesituationen. Inhaber oder Gründer, die ihr Lebenswerk übergeben wollen, finden in uns einen verantwortungsvollen Partner, der auf Stabilität, Kontinuität und kulturelle Passung achtet. Unser Fokus liegt nicht auf Restrukturierung, sondern auf Weiterentwicklung.</p>
-    <p>Was uns auszeichnet, ist unser aktiver, partnerschaftlicher Ansatz: Wir bringen unsere unternehmerische Erfahrung ein, arbeiten eng mit dem bestehenden Management zusammen und verstehen uns als Mitgestalter – nicht als reine Kapitalgeber. Gemeinsam entwickeln wir eine klare Zukunftsstrategie und begleiten deren Umsetzung über Jahre hinweg.</p>
-    <p>Nachhaltigkeit, Verantwortungsbewusstsein und operative Exzellenz sind für uns kein Lippenbekenntnis, sondern gelebte Prinzipien.</p>
-    </div>
-  </section>
+      <section class="rfj-step" data-step="1" data-name="zGG auswählen">
+        <div class="rfj-image-slot rfj-has-img">
+          <img src="images/zgg.webp" alt="Beispielbild: zulässiges Gesamtgewicht am Typenschild oder Fahrzeugschein finden" loading="lazy">
+        </div>
+        <div class="rfj-question-card">
+          <h3>Welches zulässige Gesamtgewicht ist aktuell eingetragen?</h3>
+          <p>Wählen Sie das aktuell eingetragene zulässige Gesamtgewicht in kg. Sie finden den Wert im Fahrzeugschein oder auf dem Typenschild – entscheidend ist der zugelassene Wert, nicht das aktuell gewogene Gewicht.</p>
+          <label class="rfj-select-label" for="rfj-zgg-select">zGG auswählen</label>
+          <div class="rfj-select-wrap">
+            <select id="rfj-zgg-select" class="rfj-select" aria-label="zGG auswählen"></select>
+          </div>
+          <div id="rfj-zgg-help" class="rfj-select-hint">Es werden nur Werte angezeigt, die für diesen Auflastungs-Check vorgesehen sind.</div>
+          <button type="button" class="rfj-button rfj-button-primary rfj-select-next" data-continue="zgg">Auswahl übernehmen</button>
+          <div class="rfj-error" data-error></div>
+        </div>
+      </section>
 
-  <!-- FAQ -->
-  <section id="faq" class="section light">
-    <div class="container">
-      <h2>Häufig gestellte Fragen</h2>
+      <section class="rfj-step" data-step="2" data-name="1-VA auswählen">
+        <div class="rfj-image-slot rfj-has-img">
+          <img src="images/va.webp" alt="Beispielbild: zulässige Vorderachslast 1-VA finden" loading="lazy">
+        </div>
+        <div class="rfj-question-card">
+          <h3>Welche zulässige Traglast hat die Vorderachse?</h3>
+          <p>Wählen Sie die aktuell eingetragene Vorderachslast in kg. Auf dem Typenschild steht sie meist bei <strong>1-VA</strong>, im Fahrzeugschein bei Achse 1 / 8.1.</p>
+          <label class="rfj-select-label" for="rfj-va-select">1-VA auswählen</label>
+          <div class="rfj-select-wrap">
+            <select id="rfj-va-select" class="rfj-select" aria-label="Vorderachslast auswählen"></select>
+          </div>
+          <div id="rfj-va-help" class="rfj-select-hint">Die Auswahl ist auf passende Kombinationen zum gewählten zGG gefiltert.</div>
+          <button type="button" class="rfj-button rfj-button-primary rfj-select-next" data-continue="va">Auswahl übernehmen</button>
+          <div class="rfj-error" data-error></div>
+        </div>
+      </section>
 
-      <div class="faq-item">
-        <h3>Welche Unternehmen sind für BD Capital interessant?</h3>
-        <p>Wir fokussieren uns auf etablierte mittelständische Unternehmen mit einem nachhaltigen Geschäftsmodell, stabilen Cashflows und Entwicklungspotenzial. Branchenübergreifend sind uns besonders Firmen mit gesellschaftlichem Nutzen, technologischer Substanz oder operativer Exzellenz wichtig.</p>
+      <section class="rfj-step" data-step="3" data-name="2-HA auswählen">
+        <div class="rfj-image-slot rfj-has-img">
+          <img src="images/ha.webp" alt="Beispielbild: zulässige Hinterachslast 2-HA finden" loading="lazy">
+        </div>
+        <div class="rfj-question-card">
+          <h3>Welche zulässige Traglast hat die Hinterachse?</h3>
+          <p>Wählen Sie die aktuell eingetragene Hinterachslast in kg. Auf dem Typenschild steht sie meist bei <strong>2-HA</strong>, im Fahrzeugschein bei Achse 2 / 8.2.</p>
+          <label class="rfj-select-label" for="rfj-ha-select">2-HA auswählen</label>
+          <div class="rfj-select-wrap">
+            <select id="rfj-ha-select" class="rfj-select" aria-label="Hinterachslast auswählen"></select>
+          </div>
+          <div id="rfj-ha-help" class="rfj-select-hint">Nach Auswahl der Hinterachslast wird das Ergebnis direkt angezeigt.</div>
+          <button type="button" class="rfj-button rfj-button-primary rfj-select-next" data-continue="ha">Ergebnis anzeigen</button>
+          <div class="rfj-error" data-error></div>
+        </div>
+      </section>
+
+      <div class="rfj-nav">
+        <button type="button" id="rfj-prev" class="rfj-button rfj-button-ghost" disabled>Zurück</button>
+        <button type="button" id="rfj-reset" class="rfj-button">Neu starten</button>
       </div>
+    </form>
+  </div>
 
-      <div class="faq-item">
-        <h3>Wie gestaltet sich der Beteiligungsprozess?</h3>
-        <p>Der Prozess beginnt mit einem unverbindlichen Kennenlernen. Anschließend erfolgt eine strukturierte Analyse (Due Diligence), bei der wir das Unternehmen ganzheitlich betrachten – nicht nur finanziell, sondern auch kulturell und operativ. Auf dieser Basis entwickeln wir gemeinsam ein partnerschaftliches Konzept zur Nachfolge oder Weiterentwicklung, das individuell zugeschnitten ist.</p>
-      </div>
+  <div id="rfj-results" class="rfj-result" hidden aria-live="polite"></div>
+  <div id="rfj-contact-notice" class="rfj-contact-notice" aria-live="polite"></div>
 
-      <div class="faq-item">
-        <h3>Wie sieht Ihre Rolle nach der Beteiligung aus?</h3>
-        <p>Wir verstehen uns als langfristige Partner. Nach dem Einstieg bleiben wir aktiv im Austausch mit der Geschäftsführung, bringen strategische Impulse ein und unterstützen bei Schlüsselthemen – etwa Digitalisierung, Nachhaltigkeit oder Organisationsentwicklung. Dabei greifen wir nicht in das Tagesgeschäft ein, sondern begleiten auf Augenhöhe.</p>
-      </div>
-
-      <div class="faq-item">
-        <h3>Ist auch eine Teilnachfolge möglich?</h3>
-        <p>Ja. Wir bieten flexible Beteiligungsmodelle. Eine schrittweise Übergabe – z. B. über eine Teilbeteiligung mit späterem vollständigem Rückzug – ist ebenso möglich wie der vollständige Verkauf. Entscheidend ist, was für den Unternehmer, das Unternehmen und die Mitarbeitenden langfristig sinnvoll ist.</p>
-      </div>
-
-      <div class="faq-item">
-        <h3>Wie schnell kann ein Abschluss erfolgen?</h3>
-        <p>Das hängt von der Ausgangssituation ab. Wir arbeiten effizient, aber mit der gebotenen Gründlichkeit. Vom Erstgespräch bis zur finalen Umsetzung vergehen in der Regel einige Wochen bis wenige Monate. Transparenz, Vertrauen und Fairness stehen dabei im Vordergrund.</p>
-      </div>
+  <div id="rfj-contact-modal" class="rfj-modal" hidden aria-hidden="true">
+    <div class="rfj-modal-backdrop" data-close-modal></div>
+    <div class="rfj-modal-panel" role="dialog" aria-modal="true" aria-labelledby="rfj-modal-title">
+      <button type="button" class="rfj-modal-close" data-close-modal aria-label="Formular schließen">×</button>
+      <h3 id="rfj-modal-title">Anfrage per Formular</h3>
+      <p id="rfj-modal-intro">Füllen Sie das Formular aus. Wir übernehmen Ihre bisherigen Angaben automatisch.</p>
+      <div id="rfj-modal-summary" class="rfj-modal-summary"></div>
+      <form id="rfj-contact-form" novalidate>
+        <input type="text" id="rfj-contact-hp" name="website" class="rfj-hp" tabindex="-1" autocomplete="off" aria-hidden="true">
+        <div class="rfj-form-grid">
+          <label class="rfj-field">
+            <span>Name *</span>
+            <input id="rfj-contact-name" class="rfj-input" type="text" name="name" autocomplete="name" required>
+          </label>
+          <label class="rfj-field">
+            <span>Telefonnummer</span>
+            <input id="rfj-contact-phone" class="rfj-input" type="tel" name="phone" autocomplete="tel">
+          </label>
+          <label class="rfj-field">
+            <span>E-Mail</span>
+            <input id="rfj-contact-email" class="rfj-input" type="email" name="email" autocomplete="email">
+          </label>
+          <label class="rfj-field rfj-field-full">
+            <span>Fotos hochladen optional</span>
+            <input id="rfj-contact-photos" class="rfj-input" type="file" name="photos" accept="image/*" multiple>
+            <small>Optional: Fotos von Fahrzeugschein, Typenschild oder Hinterachse. Maximal 5 MB pro Foto, maximal 12 MB gesamt.</small>
+          </label>
+          <label class="rfj-field rfj-field-full">
+            <span>Nachricht / Rückrufwunsch</span>
+            <textarea id="rfj-contact-message" class="rfj-textarea" name="message" rows="8"></textarea>
+          </label>
+        </div>
+        <label class="rfj-consent">
+          <input id="rfj-contact-consent" type="checkbox" required>
+          <span>Ich bin damit einverstanden, dass ramto meine Angaben zur Bearbeitung der Anfrage speichert und mich dazu kontaktiert.</span>
+        </label>
+        <div id="rfj-contact-status" class="rfj-form-status" aria-live="polite"></div>
+        <div class="rfj-modal-actions">
+          <button type="button" class="rfj-button" data-close-modal>Abbrechen</button>
+          <button type="submit" id="rfj-contact-submit" class="rfj-button rfj-button-dark">Anfrage senden</button>
+        </div>
+      </form>
     </div>
-  </section>
+  </div>
 
-  <!-- Kontakt -->
-  <section id="contact" class="section dark">
-    <div class="container">
-      <h2>Kontakt</h2>
-      <p>Sie möchten mehr erfahren oder mit uns sprechen? Wir freuen uns auf Ihre Nachricht.</p>
-      <p><strong>Email:</strong> jonasdieckmann@bd-capital.de</p>
-      <p><strong>Telefon:</strong> +49 1512 0512377</p>
-    </div>
-  </section>
+  <script>
+    (function () {
+      "use strict";
 
-  <!-- Footer -->
-  <footer class="footer">
-    <div class="container">
-      <p>© 2025 BD Capital – Alle Rechte vorbehalten.</p>
-      <p>BD Capital ist eine Gesellschaft bürgerlichen Rechts (GbR). <br>
-      Kontakt: jonasdieckmann@bd-capital.de · Feldstrasse 22 · 40667 Meerbusch</p>
-    </div>
-  </footer>
+      var AUFLASTUNG_CONFIG = {
+        email: "info@ramto.de",
+        emailCc: "eric@ramto.de",
 
+        // Google-Sheets-Anbindung:
+        // 1) Apps-Script-Code aus der separaten Datei in ein Google Sheet einfügen.
+        // 2) Als Web-App bereitstellen.
+        // 3) Die Web-App-URL hier eintragen.
+        sheetEndpoint: "https://script.google.com/macros/s/AKfycbzEk3s6D1dOL6xJYr0k_tW1G3Tj2-hsBfJtHUPP5VWQeG9o2EuEejjn10esrBSfrVR0/exec",
+
+        // Muss identisch mit WRITE_TOKEN im Apps Script sein. Kein echter Geheimschutz,
+        // weil der Wert im Frontend sichtbar ist, aber gut gegen einfache Fremdposts/Bots.
+        sheetWriteToken: "ramtoAuflastungsAnfragenWriteToken",
+
+        // WhatsApp im internationalen Format, nur Ziffern, ohne +, Leerzeichen oder Klammern.
+        // Beispiel: 491701234567. Leer lassen = WhatsApp-Button zeigt Formular-Fallback.
+        whatsappPhone: "+49 5651 3388220",
+        wheelUrl: "https://www.ramto.de/r%C3%A4der-u-felgen/fiatalle/",
+        productUrls: {
+          A: "https://www.ramto.de/fahrwerk/#cc-m-product-10205992150",
+          B: "https://www.ramto.de/fahrwerk/auflastungsratgeber/#cc-m-product-10369099950",
+          C: "https://www.ramto.de/fahrwerk/performance-flex/"
+        },
+        prices: {
+          A: "1.699,00 €",
+          B: "2.698,00 €",
+          C: "ab 3.649,00 €"
+        },
+        priceNotes: {
+          A: "Komplettpreis inkl. Montage und Eintragung – ideal für mehr Reserven an der Hinterachse.",
+          B: "Komplettpreis inkl. Montage und Eintragung – unsere ausgewogene Lösung für Vorder- und Hinterachse.",
+          C: "Premium-Komplettfahrwerk Angebotspreis – für maximale Fahrwerksoptimierung."
+        },
+        priceIncludes: {
+          A: [
+            "inkl. MwSt.",
+            "inkl. Montage bei ramto",
+            "inkl. TÜV-Eintragung / TÜV-Abnahme wenn gewünscht",
+            "Auflastung mit Typenschild inklusive, sofern technisch möglich",
+            "persönliche Einweisung vor Ort",
+            "zzgl. ggf. notwendiger Räder/Reifen"
+          ],
+          B: [
+            "inkl. MwSt.",
+            "Montage durch ramto-Fahrwerkstechniker",
+            "TÜV-Eintragung inklusive",
+            "Auflastung mit Typenschild inklusive, sofern technisch möglich",
+            "persönliche Einweisung vor Ort",
+            "zzgl. ggf. notwendiger Räder/Reifen"
+          ],
+          C: [
+            "inkl. Montage aller Komponenten",
+            "inkl. Fahrzeugwiegung wenn erforderlich",
+            "inkl. Spurüberprüfung / Spureinstellung",
+            "inkl. TÜV-Eintragung vor Ort",
+            "kostenlose Auflastung wenn gewünscht",
+            "ramto: Fahrwerk, Räder, Reifen und TÜV aus einer Hand"
+          ]
+        }
+      };
+
+      // Technische Zuordnung fuer den Konfigurator.
+      // Zum Anpassen nur die Zahlen in ist / vaHaCp / haCp ändern oder Zeilen ergänzen.
+      // ist = aktuell eingetragene Werte. haCp = Option A. vaHaCp = Optionen B und C.
+      var AUFLASTUNG_DATEN = [
+        { chassis: "LIGHT", typ: "30", ist: { zgg: 3000, va: 1630, ha: 1650 }, vaHaCp: { zgg: 3600, va: 2000, ha: 2400 }, haCp: { zgg: 3600, va: 1630, ha: 2400 } },
+        { chassis: "LIGHT", typ: "35", ist: { zgg: 3300, va: 1750, ha: 1900 }, vaHaCp: { zgg: 3960, va: 2000, ha: 2400 }, haCp: { zgg: 3960, va: 1750, ha: 2400 } },
+        { chassis: "LIGHT", typ: "35", ist: { zgg: 3500, va: 1850, ha: 2000 }, vaHaCp: { zgg: 4200, va: 2000, ha: 2400 }, haCp: { zgg: 4090, va: 1850, ha: 2400 } },
+        { chassis: "LIGHT", typ: "35", ist: { zgg: 3510, va: 1960, ha: 2000 }, vaHaCp: { zgg: 4200, va: 2000, ha: 2400 }, haCp: { zgg: 4090, va: 1960, ha: 2400 } },
+        { chassis: "LIGHT", typ: "35", ist: { zgg: 3650, va: 1850, ha: 2000 }, vaHaCp: { zgg: 4200, va: 2000, ha: 2400 }, haCp: { zgg: 4090, va: 1850, ha: 2400 } },
+        { chassis: "LIGHT", typ: "35", ist: { zgg: 3500, va: 1960, ha: 2000 }, vaHaCp: { zgg: 4200, va: 2000, ha: 2400 }, haCp: { zgg: 4090, va: 1960, ha: 2400 } },
+        { chassis: "LIGHT", typ: "35", ist: { zgg: 3650, va: 1960, ha: 2000 }, vaHaCp: { zgg: 4200, va: 2000, ha: 2400 }, haCp: { zgg: 4090, va: 1960, ha: 2400 } },
+        { chassis: "HEAVY/MAXI", typ: "35", ist: { zgg: 3500, va: 2100, ha: 2400 }, vaHaCp: { zgg: 4200, va: 2300, ha: 2700 }, haCp: { zgg: 4200, va: 2100, ha: 2700 } },
+        { chassis: "HEAVY/MAXI", typ: "35", ist: { zgg: 3510, va: 2100, ha: 2400 }, vaHaCp: { zgg: 4200, va: 2300, ha: 2700 }, haCp: { zgg: 4200, va: 2100, ha: 2700 } },
+        { chassis: "HEAVY/MAXI", typ: "40", ist: { zgg: 4000, va: 2100, ha: 2400 }, vaHaCp: { zgg: 4700, va: 2300, ha: 2700 }, haCp: { zgg: 4700, va: 2100, ha: 2700 } },
+        { chassis: "HEAVY/MAXI", typ: "40", ist: { zgg: 4200, va: 2100, ha: 2400 }, vaHaCp: { zgg: 4700, va: 2300, ha: 2700 }, haCp: { zgg: 4700, va: 2100, ha: 2700 } },
+        { chassis: "HEAVY/MAXI", typ: "40", ist: { zgg: 4250, va: 2100, ha: 2400 }, vaHaCp: { zgg: 4700, va: 2300, ha: 2700 }, haCp: { zgg: 4700, va: 2100, ha: 2700 } },
+        { chassis: "HEAVY/MAXI", typ: "40", ist: { zgg: 4400, va: 2100, ha: 2500 }, vaHaCp: { zgg: 4700, va: 2300, ha: 2700 }, haCp: { zgg: 4700, va: 2100, ha: 2700 } }
+      ];
+
+      var OPTIONEN = [
+        {
+          key: "A",
+          name: "CP Luftfedersystem Hinterachse",
+          subtitle: "Die pragmatische Lösung, wenn vor allem die Hinterachse mehr Unterstützung und Zuladungsreserve braucht.",
+          dataKey: "haCp",
+          imagePath: "images/option-a.webp",
+          imageAlt: "Fiat Ducato Camper mit CP Luftfedersystem an der Hinterachse, vorne tiefer als hinten",
+          pros: [
+            "Gezielte Unterstützung der Hinterachse – besonders hilfreich bei Heckgarage, Fahrradträger, Rollerträger oder hoher Beladung im Heck.",
+            "Die Hinterachse kann per Luftdruck besser an unterschiedliche Beladung angepasst werden.",
+            "Mehr Reserven, bessere Stabilität und ein deutlich souveräneres Fahrgefühl als im stark beladenen Serienzustand.",
+            "Geringerer Umbauumfang und attraktiver Preis gegenüber den umfangreicheren Lösungen."
+          ],
+          cons: [
+            "Die Vorderachse bleibt seriennah und wird nicht angehoben.",
+            "Das Fahrzeug kann vorne sichtbar tiefer stehen als hinten – es entsteht eine leichte Keilform.",
+            "Für mehr Komfort, mehr Bodenfreiheit und eine waagerechte Fahrzeuglage ist Option B oder C die bessere Wahl."
+          ]
+        },
+        {
+          key: "B",
+          name: "CP Luftfedersystem HA + CP Komfortfedern VA",
+          subtitle: "Unsere ausgewogene Empfehlung: Hinterachse entlasten, Vorderachse anheben und das Fahrzeug harmonischer ausrichten.",
+          dataKey: "vaHaCp",
+          imagePath: "images/option-b.webp",
+          imageAlt: "Fiat Ducato Camper mit CP Komfortfedern Vorderachse und CP Luftfedersystem Hinterachse",
+          pros: [
+            "Das Fahrzeug steht deutlich ausgewogener und meist näher an einer waagerechten Linie.",
+            "Mehr Bodenfreiheit und Federweg an der Vorderachse – hilfreich bei Fähren, Einfahrten, Bordsteinen und langen Überhängen.",
+            "Mehr Fahrkomfort vorne und hinten sowie ein stabileres Gefühl bei Seitenwind, Kurven und Lastwechseln.",
+            "Sehr gute Lösung, wenn neben der Auflastung auch Alltagstauglichkeit und Komfort spürbar besser werden sollen."
+          ],
+          cons: [
+            "Mehr Umbauumfang und höhere Investition als die reine Hinterachs-Lösung.",
+            "Die passende Federvariante wird individuell nach Fahrzeuggewicht und Ausstattung geprüft.",
+            "Wer das Maximum aus Komfort, Dämpfung und Fahrperformance holen möchte, sollte Option C prüfen."
+          ]
+        },
+        {
+          key: "C",
+          name: "Performance Flex Komplettfahrwerk",
+          subtitle: "Die Premium-Lösung für Stabilität, Komfort, Bodenfreiheit, Auflastung und Fahrperformance aus einem Guss.",
+          dataKey: "vaHaCp",
+          imagePath: "images/option-c.webp",
+          imageAlt: "Fiat Ducato Camper mit Performance Flex Komplettfahrwerk, Federn, Luftfahrwerk und Dämpfern",
+          pros: [
+            "Ganzheitliche Fahrwerksoptimierung statt reiner Achslast-Erhöhung – abgestimmt auf Gewicht, Nutzung und gewünschtes Fahrverhalten.",
+            "Mehr Stabilität und Sicherheit, mehr Komfort und eine spürbar bessere Fahrperformance.",
+            "Mehr Bodenfreiheit und eine waagerechte Ausrichtung des Fahrzeugs sind möglich.",
+            "CamperMatic-/Bilstein-Dämpfer, CP Komfortfedern und CP Luftfahrwerk werden als System kombiniert.",
+            "Montage, Prüfung, TÜV und auf Wunsch Auflastung direkt bei ramto aus einer Hand."
+          ],
+          cons: [
+            "Höchster Leistungsumfang und dadurch die größte Investition der drei Optionen.",
+            "Für eine reine Minimal-Auflastung kann Option A oder B bereits ausreichen.",
+            "Die finale Konfiguration wird nach Fahrzeuggewicht und gewünschtem Fahrverhalten individuell festgelegt."
+          ]
+        }
+      ];
+
+      var root = document.getElementById("ramto-fiat-journey");
+      if (!root) return;
+
+      var steps = Array.prototype.slice.call(root.querySelectorAll(".rfj-step"));
+      var form = root.querySelector("#rfj-form");
+      var prevButton = root.querySelector("#rfj-prev");
+      var resetButton = root.querySelector("#rfj-reset");
+      var progressBar = root.querySelector("#rfj-progress-bar");
+      var stepLabel = root.querySelector("#rfj-step-label");
+      var stepName = root.querySelector("#rfj-step-name");
+      var results = root.querySelector("#rfj-results");
+      var contactNotice = root.querySelector("#rfj-contact-notice");
+      var contactModal = root.querySelector("#rfj-contact-modal");
+      var contactForm = root.querySelector("#rfj-contact-form");
+      var contactTitle = root.querySelector("#rfj-modal-title");
+      var contactIntro = root.querySelector("#rfj-modal-intro");
+      var contactSummary = root.querySelector("#rfj-modal-summary");
+      var contactStatus = root.querySelector("#rfj-contact-status");
+      var contactSubmit = root.querySelector("#rfj-contact-submit");
+      var leafSelect = root.querySelector("#rfj-leaf-select");
+      var zggSelect = root.querySelector("#rfj-zgg-select");
+      var vaSelect = root.querySelector("#rfj-va-select");
+      var haSelect = root.querySelector("#rfj-ha-select");
+      var currentStep = 0;
+      var activeFormInquiry = null;
+      var noticeTimer = null;
+      var state = {
+        leaf: null,
+        zgg: null,
+        va: null,
+        ha: null
+      };
+
+      function kg(value) {
+        if (value === null || value === undefined || value === "") return "Prüfung erforderlich";
+        return String(value).replace(/\B(?=(\d{3})+(?!\d))/g, ".") + " kg";
+      }
+
+      function price(value) {
+        return value && value !== "" ? value : "TBD";
+      }
+
+      function escapeHtml(value) {
+        return String(value)
+          .replace(/&/g, "&amp;")
+          .replace(/</g, "&lt;")
+          .replace(/>/g, "&gt;")
+          .replace(/\"/g, "&quot;")
+          .replace(/'/g, "&#039;");
+      }
+
+      function uniqueSorted(rows, getter) {
+        var seen = {};
+        var values = [];
+        rows.forEach(function (row) {
+          var value = getter(row);
+          if (value !== null && value !== undefined && !seen[value]) {
+            seen[value] = true;
+            values.push(value);
+          }
+        });
+        values.sort(function (a, b) { return a - b; });
+        return values;
+      }
+
+      function joinKg(values) {
+        return values.map(function (value) { return kg(value); }).join(" / ");
+      }
+
+      function rowsForZgg(zgg) {
+        return AUFLASTUNG_DATEN.filter(function (row) { return row.ist.zgg === zgg; });
+      }
+
+      function rowsForZggVa(zgg, va) {
+        return AUFLASTUNG_DATEN.filter(function (row) { return row.ist.zgg === zgg && row.ist.va === va; });
+      }
+
+      function rowsForExact(zgg, va, ha) {
+        return AUFLASTUNG_DATEN.filter(function (row) {
+          return row.ist.zgg === zgg && row.ist.va === va && row.ist.ha === ha;
+        });
+      }
+
+      function selectedRow() {
+        var rows = rowsForExact(state.zgg, state.va, state.ha);
+        return rows.length ? rows[0] : null;
+      }
+
+      function showError(stepIndex, message) {
+        var error = steps[stepIndex].querySelector("[data-error]");
+        if (!error) return;
+        error.textContent = message || "";
+        error.classList.toggle("is-visible", Boolean(message));
+      }
+
+      function clearErrors() {
+        steps.forEach(function (step) {
+          var error = step.querySelector("[data-error]");
+          if (error) {
+            error.textContent = "";
+            error.classList.remove("is-visible");
+          }
+        });
+      }
+
+      function optionHtml(value, label, selected, disabled) {
+        var selectedText = selected ? " selected" : "";
+        var disabledText = disabled ? " disabled" : "";
+        return '<option value="' + escapeHtml(value) + '"' + selectedText + disabledText + '>' + escapeHtml(label) + '</option>';
+      }
+
+      function setHint(id, html) {
+        var el = root.querySelector("#" + id);
+        if (el) el.innerHTML = html || "";
+      }
+
+      function renderLeafSelect() {
+        if (!leafSelect) return;
+        leafSelect.value = state.leaf === true ? "yes" : state.leaf === false ? "no" : "";
+      }
+
+      function renderZggChoices() {
+        if (!zggSelect) return;
+        var values = uniqueSorted(AUFLASTUNG_DATEN, function (row) { return row.ist.zgg; });
+        var html = optionHtml("", "Bitte zGG auswählen", !state.zgg, true);
+        html += values.map(function (value) {
+          var rows = rowsForZgg(value);
+          var vaValues = uniqueSorted(rows, function (row) { return row.ist.va; });
+          var label = kg(value);
+          return optionHtml(value, label, state.zgg === value, false);
+        }).join("");
+        zggSelect.innerHTML = html;
+        zggSelect.disabled = state.leaf !== true;
+
+        if (state.zgg) {
+          var rowsForSelected = rowsForZgg(state.zgg);
+          var vaForSelected = uniqueSorted(rowsForSelected, function (row) { return row.ist.va; });
+          setHint("rfj-zgg-help", "Ausgewählt: <strong>" + escapeHtml(kg(state.zgg)) + "</strong>. Dazu gibt es in der Tabelle diese 1-VA-Werte: " + escapeHtml(joinKg(vaForSelected)) + ".");
+        } else {
+          setHint("rfj-zgg-help", "Mögliche zGG-Werte aus der Tabelle: " + escapeHtml(joinKg(values)) + ". Nach der Auswahl geht es automatisch weiter.");
+        }
+      }
+
+      function renderVaChoices() {
+        if (!vaSelect) return;
+        var rows = rowsForZgg(state.zgg);
+        var values = uniqueSorted(rows, function (row) { return row.ist.va; });
+        var html = optionHtml("", state.zgg ? "Bitte 1-VA auswählen" : "Bitte zuerst zGG auswählen", !state.va, true);
+
+        html += values.map(function (value) {
+          var filteredRows = rowsForZggVa(state.zgg, value);
+          var haValues = uniqueSorted(filteredRows, function (row) { return row.ist.ha; });
+          var label = kg(value);
+          return optionHtml(value, label, state.va === value, false);
+        }).join("");
+
+        vaSelect.innerHTML = html;
+        vaSelect.disabled = !state.zgg;
+
+        if (!state.zgg) {
+          setHint("rfj-va-help", "Bitte zuerst das zGG auswählen. Danach werden nur passende 1-VA-Werte angezeigt.");
+        } else if (state.va) {
+          var haForSelected = uniqueSorted(rowsForZggVa(state.zgg, state.va), function (row) { return row.ist.ha; });
+          setHint("rfj-va-help", "Ausgewählt: <strong>" + escapeHtml(kg(state.va)) + "</strong>. Dazu gibt es in der Tabelle diese 2-HA-Werte: " + escapeHtml(joinKg(haForSelected)) + ".");
+        } else {
+          setHint("rfj-va-help", "Für zGG " + escapeHtml(kg(state.zgg)) + " sind diese 1-VA-Werte in der Tabelle vorhanden: " + escapeHtml(joinKg(values)) + ".");
+        }
+      }
+
+      function renderHaChoices() {
+        if (!haSelect) return;
+        var rows = rowsForZggVa(state.zgg, state.va);
+        var values = uniqueSorted(rows, function (row) { return row.ist.ha; });
+        var html = optionHtml("", state.zgg && state.va ? "Bitte 2-HA auswählen" : "Bitte zuerst zGG und 1-VA auswählen", !state.ha, true);
+
+        html += values.map(function (value) {
+          var exactRows = rowsForExact(state.zgg, state.va, value);
+          var label = kg(value);
+          return optionHtml(value, label, state.ha === value, false);
+        }).join("");
+
+        haSelect.innerHTML = html;
+        haSelect.disabled = !state.zgg || !state.va;
+
+        if (!state.zgg || !state.va) {
+          setHint("rfj-ha-help", "Bitte zuerst zGG und 1-VA auswählen. Danach werden nur passende 2-HA-Werte angezeigt.");
+        } else if (state.ha) {
+          setHint("rfj-ha-help", "Ausgewählt: <strong>" + escapeHtml(kg(state.ha)) + "</strong>. Das Ergebnis wird mit genau dieser Tabellenkombination berechnet.");
+        } else {
+          setHint("rfj-ha-help", "Für zGG " + escapeHtml(kg(state.zgg)) + " und 1-VA " + escapeHtml(kg(state.va)) + " sind diese 2-HA-Werte in der Tabelle vorhanden: " + escapeHtml(joinKg(values)) + ".");
+        }
+      }
+
+      function uniqueProfiles(rows) {
+        var seen = {};
+        var profiles = [];
+        rows.forEach(function (row) {
+          var label = row.chassis + " Typ " + row.typ;
+          if (!seen[label]) {
+            seen[label] = true;
+            profiles.push(label);
+          }
+        });
+        return profiles.length ? profiles.join(" · ") : "";
+      }
+
+      function renderCurrentChoices() {
+        renderLeafSelect();
+        renderZggChoices();
+        renderVaChoices();
+        renderHaChoices();
+      }
+
+      function updateProgress() {
+        steps.forEach(function (step, index) {
+          step.classList.toggle("is-active", index === currentStep);
+        });
+        var percent = ((currentStep + 1) / steps.length) * 100;
+        progressBar.style.width = percent + "%";
+        stepLabel.textContent = "Schritt " + (currentStep + 1) + " von " + steps.length;
+        stepName.textContent = steps[currentStep].getAttribute("data-name") || "";
+        prevButton.disabled = currentStep === 0;
+        resetButton.disabled = currentStep === 0 && state.leaf === null && results.hidden;
+      }
+
+      function safeScrollTo(element) {
+        if (!element || !element.scrollIntoView) return;
+        window.setTimeout(function () {
+          try {
+            element.scrollIntoView({ behavior: "smooth", block: "start" });
+          } catch (error) {
+            element.scrollIntoView(true);
+          }
+        }, 30);
+      }
+
+      function scrollToForm() {
+        var activeStep = steps[currentStep] || null;
+        safeScrollTo(activeStep || root.querySelector(".rfj-form") || root.querySelector(".rfj-shell"));
+      }
+
+      function goTo(stepIndex) {
+        clearErrors();
+        results.hidden = true;
+        results.innerHTML = "";
+        currentStep = Math.max(0, Math.min(steps.length - 1, stepIndex));
+        renderCurrentChoices();
+        updateProgress();
+        scrollToForm();
+      }
+
+      function targetValues(row, option) {
+        if (!row) return { zgg: null, va: null, ha: null };
+        return row[option.dataKey] || { zgg: null, va: null, ha: null };
+      }
+
+      function trackEvent(eventName, params) {
+        params = params || {};
+        params.event_category = params.event_category || "Fiat Auflastungs-Check";
+
+        if (window.gtag && typeof window.gtag === "function") {
+          window.gtag("event", eventName, params);
+        }
+
+        if (window.dataLayer && Array.isArray(window.dataLayer)) {
+          window.dataLayer.push(Object.assign({ event: eventName }, params));
+        }
+      }
+
+      function trackingBase(option, row) {
+        return {
+          option: option ? option.key : undefined,
+          option_name: option ? option.name : undefined,
+          current_zgg: state.zgg || undefined,
+          current_va: state.va || undefined,
+          current_ha: state.ha || undefined,
+          chassis: row ? row.chassis : undefined,
+          vehicle_type: row ? row.typ : undefined
+        };
+      }
+
+      function cleanPhoneNumber(value) {
+        return String(value || "").replace(/[^0-9]/g, "");
+      }
+
+      function stepNameByIndex(stepIndex) {
+        var index = parseInt(stepIndex, 10);
+        if (isNaN(index) || !steps[index]) return "";
+        return steps[index].getAttribute("data-name") || "";
+      }
+
+      function stateLabel(value) {
+        return value === null || value === undefined || value === "" ? "noch nicht ausgewählt" : kg(value);
+      }
+
+      function leafLabel() {
+        if (state.leaf === true) return "Ja";
+        if (state.leaf === false) return "Nein / nicht sicher";
+        return "noch nicht ausgewählt";
+      }
+
+      function stateSummaryLines(row) {
+        return [
+          "Blattfederung Hinterachse: " + leafLabel(),
+          "Aktuelles zGG: " + stateLabel(state.zgg),
+          "Aktuelle Vorderachslast 1-VA: " + stateLabel(state.va),
+          "Aktuelle Hinterachslast 2-HA: " + stateLabel(state.ha),
+          "Tabellenprofil: " + (row ? (row.chassis + " / Typ " + row.typ) : "nicht eindeutig erkannt - bitte manuell prüfen")
+        ];
+      }
+
+      function optionByKey(optionKey) {
+        return OPTIONEN.filter(function (item) { return item.key === optionKey; })[0] || null;
+      }
+
+      function requestTitle(inquiryType, option, stepIndex) {
+        if (inquiryType === "option" && option) return "Option " + option.key + ": " + option.name;
+        if (inquiryType === "no_leaf") return "Blattfederung nein / unsicher";
+        if (inquiryType === "help") return "Persönliche Beratung" + (stepNameByIndex(stepIndex) ? " – " + stepNameByIndex(stepIndex) : "");
+        return "Persönliche Beratung";
+      }
+
+      function buildSubject(inquiryType, option, stepIndex) {
+        if (inquiryType === "option" && option) {
+          return "Anfrage Fiat Ducato Auflastung - Option " + option.key + " - " + option.name;
+        }
+        if (inquiryType === "no_leaf") {
+          return "Rückfrage Fiat Ducato Auflastung - keine Blattfederung / unsicher";
+        }
+        return "Beratungswunsch Fiat Ducato Auflastung - Angaben unklar" + (stepNameByIndex(stepIndex) ? " - " + stepNameByIndex(stepIndex) : "");
+      }
+
+      function buildMessage(inquiryType, option, row, extra) {
+        extra = extra || {};
+        var target = option ? targetValues(row, option) : { zgg: null, va: null, ha: null };
+        var lines = ["Hallo ramto-Team,", ""];
+
+        if (inquiryType === "option" && option) {
+          lines = lines.concat([
+            "ich interessiere mich für eine Auflastung meines Fiat Ducato / Stellantis Wohnmobils.",
+            "",
+            "Ausgewählte Option:",
+            "Option " + option.key + ": " + option.name,
+            "Preis laut Konfigurator: " + price(AUFLASTUNG_CONFIG.prices[option.key]),
+            "Preis-/Paketinfo: " + (AUFLASTUNG_CONFIG.priceNotes[option.key] || ""),
+            "Enthalten laut Konfigurator: " + (AUFLASTUNG_CONFIG.priceIncludes[option.key] || []).join("; "),
+            "",
+            "Meine Fahrzeugdaten:"
+          ]);
+          lines = lines.concat(stateSummaryLines(row));
+          lines = lines.concat([
+            "",
+            "Angezeigte Auflastung:",
+            "Neues zGG: " + kg(target.zgg),
+            "Neue Vorderachslast VA: " + kg(target.va),
+            "Neue Hinterachslast HA: " + kg(target.ha),
+            "",
+            "Mir ist bewusst, dass die angegebene Tragkraft passende Räder/Reifen mit entsprechender Traglast voraussetzt. Bitte prüfen Sie auch passende Fiat-Felgen/Räder.",
+            "",
+            "Bitte senden Sie mir ein Angebot und teilen Sie mir mit, welche weiteren Daten oder Unterlagen benötigt werden."
+          ]);
+        } else if (inquiryType === "no_leaf") {
+          lines = lines.concat([
+            "ich habe den Auflastungs-Check genutzt, bin aber bei der Blattfederung nicht sicher bzw. mein Fahrzeug hat keine Blattfederung an der Hinterachse.",
+            "",
+            "Meine bisherigen Angaben:"
+          ]);
+          lines = lines.concat(stateSummaryLines(row));
+          lines = lines.concat([
+            "",
+            "Bitte teilen Sie mir mit, ob es trotzdem eine passende Lösung gibt und welche Fotos oder Fahrzeugdaten Sie benötigen."
+          ]);
+        } else {
+          lines = lines.concat([
+            "ich nutze den ramto Auflastungs-Check, bin mir aber bei einer Angabe unsicher oder finde die Information nicht.",
+            "",
+            "Unsicher bei: " + (stepNameByIndex(extra.stepIndex) || "nicht eindeutig"),
+            "",
+            "Meine bisherigen Angaben:"
+          ]);
+          lines = lines.concat(stateSummaryLines(row));
+          lines = lines.concat([
+            "",
+            "Bitte beraten Sie mich persönlich und teilen Sie mir mit, welche Daten, Fotos oder Unterlagen hilfreich sind."
+          ]);
+        }
+
+        if (extra.customerName || extra.customerPhone || extra.customerEmail || extra.customerMessage) {
+          lines = lines.concat(["", "Kontaktdaten aus dem Formular:"]);
+          if (extra.customerName) lines.push("Name: " + extra.customerName);
+          if (extra.customerPhone) lines.push("Telefon: " + extra.customerPhone);
+          if (extra.customerEmail) lines.push("E-Mail: " + extra.customerEmail);
+          if (extra.customerMessage) lines.push("Nachricht: " + extra.customerMessage);
+        }
+
+        lines = lines.concat(["", "Vielen Dank!"]);
+        return lines.join("\n");
+      }
+
+      function buildInquiryPayload(channel, inquiryType, option, row, extra) {
+        extra = extra || {};
+        var target = option ? targetValues(row, option) : { zgg: null, va: null, ha: null };
+        return {
+          writeToken: AUFLASTUNG_CONFIG.sheetWriteToken || "",
+          toolVersion: "6.1",
+          timestampClient: new Date().toISOString(),
+          sourcePage: window.location.href,
+          pageTitle: document.title || "",
+          userAgent: navigator.userAgent || "",
+          channel: channel,
+          inquiryType: inquiryType || "option",
+          requestTitle: requestTitle(inquiryType, option, extra.stepIndex),
+          optionKey: option ? option.key : "",
+          optionName: option ? option.name : "",
+          optionPrice: option ? price(AUFLASTUNG_CONFIG.prices[option.key]) : "",
+          leafSpring: leafLabel(),
+          currentZgg: state.zgg || "",
+          currentVa: state.va || "",
+          currentHa: state.ha || "",
+          chassis: row ? row.chassis : "",
+          vehicleType: row ? row.typ : "",
+          targetZgg: target.zgg || "",
+          targetVa: target.va || "",
+          targetHa: target.ha || "",
+          helpStep: stepNameByIndex(extra.stepIndex),
+          customerName: extra.customerName || "",
+          customerPhone: extra.customerPhone || "",
+          customerEmail: extra.customerEmail || "",
+          customerMessage: extra.customerMessage || "",
+          honeypot: extra.honeypot || "",
+          photos: extra.photos || [],
+          messageText: buildMessage(inquiryType, option, row, extra)
+        };
+      }
+
+      function saveInquiry(payload) {
+        var endpoint = AUFLASTUNG_CONFIG.sheetEndpoint || "";
+        if (!endpoint) {
+          if (window.console && console.warn) console.warn("ramto Auflastungs-Check: sheetEndpoint ist nicht konfiguriert.");
+          return Promise.resolve(false);
+        }
+
+        var body = JSON.stringify(payload || {});
+
+        if (window.fetch) {
+          return fetch(endpoint, {
+            method: "POST",
+            mode: "no-cors",
+            cache: "no-cache",
+            keepalive: true,
+            headers: { "Content-Type": "text/plain;charset=UTF-8" },
+            body: body
+          }).then(function () {
+            return true;
+          }).catch(function () {
+            if (navigator.sendBeacon) {
+              try {
+                var blob = new Blob([body], { type: "text/plain;charset=UTF-8" });
+                return navigator.sendBeacon(endpoint, blob);
+              } catch (error) {}
+            }
+            return false;
+          });
+        }
+
+        if (navigator.sendBeacon) {
+          try {
+            var beaconBlob = new Blob([body], { type: "text/plain;charset=UTF-8" });
+            return Promise.resolve(navigator.sendBeacon(endpoint, beaconBlob));
+          } catch (error) {}
+        }
+
+        return Promise.resolve(false);
+      }
+
+      function buildEmailHref(inquiryType, option, row, extra) {
+        return addCcToMailto("mailto:" + AUFLASTUNG_CONFIG.email, buildSubject(inquiryType, option, extra && extra.stepIndex), buildMessage(inquiryType, option, row, extra));
+      }
+
+      function buildWhatsAppHref(inquiryType, option, row, extra) {
+        var phone = cleanPhoneNumber(AUFLASTUNG_CONFIG.whatsappPhone);
+        if (!phone) return "";
+        return "https://wa.me/" + phone + "?text=" + encodeURIComponent(buildMessage(inquiryType, option, row, extra));
+      }
+
+      function renderContactActions(inquiryType, option, stepIndex) {
+        var optionAttr = option ? " data-option='" + escapeHtml(option.key) + "'" : "";
+        var stepAttr = stepIndex !== undefined && stepIndex !== null ? " data-help-step='" + escapeHtml(stepIndex) + "'" : "";
+        return "<button type='button' class='rfj-button rfj-button-dark rfj-contact-button' data-contact-channel='email' data-contact-type='" + escapeHtml(inquiryType) + "'" + optionAttr + stepAttr + ">Anfrage (per E-Mail)</button>" +
+          "<button type='button' class='rfj-button rfj-button-dark rfj-contact-button' data-contact-channel='whatsapp' data-contact-type='" + escapeHtml(inquiryType) + "'" + optionAttr + stepAttr + ">Anfrage (per WhatsApp)</button>" +
+          "<button type='button' class='rfj-button rfj-button-dark rfj-contact-button' data-contact-channel='formular' data-contact-type='" + escapeHtml(inquiryType) + "'" + optionAttr + stepAttr + ">Anfrage (per Formular)</button>";
+      }
+
+      function renderHelpCards() {
+        steps.forEach(function (step, index) {
+          var card = step.querySelector(".rfj-question-card");
+          if (!card || card.querySelector(".rfj-help-card")) return;
+          var html = "<div class='rfj-help-card'>" +
+            "<strong>Sie sind sich nicht sicher oder finden den Wert nicht?</strong>" +
+            "<p>Kein Problem – wir beraten Sie gerne persönlich. Senden Sie uns einfach Ihre bisherigen Angaben, auf Wunsch auch mit Fotos von Fahrzeugschein, Typenschild oder Hinterachse.</p>" +
+            "<div class='rfj-contact-actions'>" + renderContactActions("help", null, index) + "</div>" +
+            "</div>";
+          card.insertAdjacentHTML("beforeend", html);
+        });
+      }
+
+      function showNotice(message) {
+        if (!contactNotice) return;
+        window.clearTimeout(noticeTimer);
+        contactNotice.textContent = message || "";
+        contactNotice.classList.toggle("is-visible", Boolean(message));
+        if (message) {
+          noticeTimer = window.setTimeout(function () {
+            contactNotice.classList.remove("is-visible");
+          }, 5200);
+        }
+      }
+
+      function modalSummaryHtml(inquiryType, option, row, stepIndex) {
+        var target = option ? targetValues(row, option) : { zgg: null, va: null, ha: null };
+        var html = "<strong>Zusammenfassung der Anfrage</strong>";
+        html += "<span>Art: " + escapeHtml(requestTitle(inquiryType, option, stepIndex)) + "</span>";
+        html += "<span>Blattfederung: " + escapeHtml(leafLabel()) + "</span>";
+        html += "<span>Aktuelle Werte: zGG " + escapeHtml(stateLabel(state.zgg)) + " · 1-VA " + escapeHtml(stateLabel(state.va)) + " · 2-HA " + escapeHtml(stateLabel(state.ha)) + "</span>";
+        if (row) html += "<span>Profil: " + escapeHtml(row.chassis + " / Typ " + row.typ) + "</span>";
+        if (option) html += "<span>Auflastung: zGG " + escapeHtml(kg(target.zgg)) + " · VA " + escapeHtml(kg(target.va)) + " · HA " + escapeHtml(kg(target.ha)) + "</span>";
+        return html;
+      }
+
+      function setFormStatus(message, isError) {
+        if (!contactStatus) return;
+        contactStatus.textContent = message || "";
+        contactStatus.classList.toggle("is-visible", Boolean(message));
+        contactStatus.classList.toggle("is-error", Boolean(message && isError));
+        contactStatus.classList.toggle("is-success", Boolean(message && !isError));
+      }
+
+      function openContactForm(inquiryType, option, row, stepIndex) {
+        if (!contactModal || !contactForm) return;
+        activeFormInquiry = {
+          inquiryType: inquiryType || "option",
+          optionKey: option ? option.key : "",
+          stepIndex: stepIndex
+        };
+
+        contactTitle.textContent = inquiryType === "option" && option ? "Anfrage per Formular – Option " + option.key : "Anfrage per Formular";
+        contactIntro.textContent = "Tragen Sie bitte mindestens Ihren Namen und eine Telefonnummer oder E-Mail-Adresse ein. Ihre bisherigen Angaben aus dem Auflastungs-Check werden automatisch mitgesendet.";
+        contactSummary.innerHTML = modalSummaryHtml(inquiryType, option, row, stepIndex);
+        setFormStatus("", false);
+        contactForm.reset();
+        var messageField = root.querySelector("#rfj-contact-message");
+        if (messageField) messageField.value = buildMessage(inquiryType, option, row, { stepIndex: stepIndex });
+        contactModal.hidden = false;
+        contactModal.setAttribute("aria-hidden", "false");
+        window.setTimeout(function () {
+          var nameField = root.querySelector("#rfj-contact-name");
+          if (nameField && nameField.focus) nameField.focus();
+        }, 50);
+      }
+
+      function closeContactForm() {
+        if (!contactModal) return;
+        contactModal.hidden = true;
+        contactModal.setAttribute("aria-hidden", "true");
+        activeFormInquiry = null;
+        setFormStatus("", false);
+      }
+
+      function readSelectedPhotos() {
+        var input = root.querySelector("#rfj-contact-photos");
+        var files = input && input.files ? Array.prototype.slice.call(input.files) : [];
+        var maxPerFile = 5 * 1024 * 1024;
+        var maxTotal = 12 * 1024 * 1024;
+        var total = 0;
+
+        for (var i = 0; i < files.length; i += 1) {
+          total += files[i].size || 0;
+          if ((files[i].size || 0) > maxPerFile) {
+            return Promise.reject(new Error("Ein Foto ist größer als 5 MB. Bitte verkleinern oder weniger Fotos auswählen."));
+          }
+        }
+        if (total > maxTotal) {
+          return Promise.reject(new Error("Die Fotos sind zusammen größer als 12 MB. Bitte weniger Fotos auswählen."));
+        }
+
+        return Promise.all(files.map(function (file) {
+          return new Promise(function (resolve, reject) {
+            var reader = new FileReader();
+            reader.onload = function () {
+              var result = String(reader.result || "");
+              var commaIndex = result.indexOf(",");
+              resolve({
+                name: file.name || "foto.jpg",
+                type: file.type || "application/octet-stream",
+                size: file.size || 0,
+                data: commaIndex >= 0 ? result.slice(commaIndex + 1) : result
+              });
+            };
+            reader.onerror = function () { reject(new Error("Foto konnte nicht gelesen werden.")); };
+            reader.readAsDataURL(file);
+          });
+        }));
+      }
+
+      function readFormExtra() {
+        return {
+          customerName: (root.querySelector("#rfj-contact-name") || {}).value || "",
+          customerPhone: (root.querySelector("#rfj-contact-phone") || {}).value || "",
+          customerEmail: (root.querySelector("#rfj-contact-email") || {}).value || "",
+          customerMessage: (root.querySelector("#rfj-contact-message") || {}).value || "",
+          honeypot: (root.querySelector("#rfj-contact-hp") || {}).value || "",
+          photos: []
+        };
+      }
+
+      function handleContactClick(button) {
+        var channel = button.getAttribute("data-contact-channel") || "email";
+        var inquiryType = button.getAttribute("data-contact-type") || "option";
+        var option = optionByKey(button.getAttribute("data-option"));
+        var stepIndexAttr = button.getAttribute("data-help-step");
+        var stepIndex = stepIndexAttr !== null && stepIndexAttr !== "" ? parseInt(stepIndexAttr, 10) : null;
+        var row = selectedRow();
+        var extra = { stepIndex: stepIndex };
+
+        if (channel === "formular") {
+          openContactForm(inquiryType, option, row, stepIndex);
+          trackEvent("form_button_clicked", trackingBase(option, row));
+          return;
+        }
+
+        var payload = buildInquiryPayload(channel, inquiryType, option, row, extra);
+        saveInquiry(payload);
+
+        if (channel === "email") {
+          trackEvent("email_button_clicked", trackingBase(option, row));
+          window.location.href = buildEmailHref(inquiryType, option, row, extra);
+          return;
+        }
+
+        if (channel === "whatsapp") {
+          trackEvent("whatsapp_button_clicked", trackingBase(option, row));
+          var whatsappHref = buildWhatsAppHref(inquiryType, option, row, extra);
+          if (!whatsappHref) {
+            showNotice("WhatsApp ist noch nicht konfiguriert. Bitte WhatsApp-Nummer in AUFLASTUNG_CONFIG.whatsappPhone eintragen. Als Alternative öffnet sich das Formular.");
+            openContactForm(inquiryType, option, row, stepIndex);
+            return;
+          }
+          window.open(whatsappHref, "_blank", "noopener");
+          showNotice("Falls WhatsApp nicht geöffnet wurde, nutzen Sie bitte E-Mail oder Formular als Alternative.");
+        }
+      }
+
+      function addCcToMailto(baseUrl, subject, body) {
+        return baseUrl +
+          "?cc=" + encodeURIComponent(AUFLASTUNG_CONFIG.emailCc || "") +
+          "&subject=" + encodeURIComponent(subject) +
+          "&body=" + encodeURIComponent(body);
+      }
+
+      function buildMailto(option, row) {
+        return buildEmailHref("option", option, row, {});
+      }
+
+      function buildNoLeafMailto() {
+        return buildEmailHref("no_leaf", null, selectedRow(), {});
+      }
+
+      function renderNoLeaf() {
+        results.hidden = false;
+        trackEvent("no_leaf_result_shown", { leaf_spring: "no_or_unsure" });
+        var html = "";
+        html += "<div class='rfj-result-head'>";
+        html += "  <div>";
+        html += "    <h3>Leider keine passende Auflastung</h3>";
+        html += "    <p>Diese Berechnung ist für Fahrzeuge mit blattgefederter Hinterachse ausgelegt. Ohne Blattfederung kann hier kein konkretes Auflastungsangebot berechnet werden.</p>";
+        html += "  </div>";
+        html += "  <span class='rfj-pill'>Blattfederung: Nein / unsicher</span>";
+        html += "</div>";
+        html += "<div class='rfj-alert'><strong>Bei Unsicherheit:</strong> Senden Sie ramto Fotos der Hinterachse, des Fahrzeugscheins und des Typenschilds. Dann kann das Team prüfen, ob eine Alternative möglich ist.</div>";
+        html += "<div class='rfj-option-actions' style='padding:0'>";
+        html += renderContactActions("no_leaf", null, null);
+        html += "  <button type='button' class='rfj-button' data-restart>Neu starten</button>";
+        html += "</div>";
+        results.innerHTML = html;
+        updateProgress();
+        safeScrollTo(results);
+      }
+
+      function renderResults() {
+        var row = selectedRow();
+        var intro = row
+          ? "Ihre Angaben wurden erkannt: " + row.chassis + " Typ " + row.typ + " mit " + kg(row.ist.zgg) + " zGG, " + kg(row.ist.va) + " VA und " + kg(row.ist.ha) + " HA."
+          : "Die ausgewählte Kombination konnte nicht eindeutig zugeordnet werden. Bitte Daten prüfen lassen.";
+
+        var html = "";
+        html += "<div class='rfj-result-head'>";
+        html += "  <div><h3>Ihre passenden ramto-Auflastungslösungen</h3><p>" + escapeHtml(intro) + "</p></div>";
+        html += "  <span class='rfj-pill'>" + escapeHtml(kg(state.zgg)) + " aktuell</span>";
+        html += "</div>";
+
+        html += "<div class='rfj-alert'><strong>Wichtige Voraussetzung</strong>Die genannten Traglasten gelten nur, wenn Räder und Reifen die jeweilige Tragkraft erfüllen. Passende Fiat-Felgen/Räder sind verfügbar: <a href='" + escapeHtml(AUFLASTUNG_CONFIG.wheelUrl) + "' target='_blank' rel='noopener'>Fiat-Felgen ansehen</a>.</div>";
+
+        if (!row) {
+          html += "<div class='rfj-alert'><strong>Bitte prüfen lassen</strong>Ihre Kombination braucht eine individuelle Prüfung. Senden Sie uns die Daten einfach zu – wir prüfen die passende Lösung persönlich.</div>";
+        }
+
+        html += "<div class='rfj-options'>";
+
+        OPTIONEN.forEach(function (option) {
+          var target = targetValues(row, option);
+          var productUrl = AUFLASTUNG_CONFIG.productUrls[option.key];
+          var optionPrice = price(AUFLASTUNG_CONFIG.prices[option.key]);
+
+          html += "<article class='rfj-option-card'>";
+          html += "  <div class='rfj-option-heading'>";
+          html += "    <span class='rfj-letter'>" + escapeHtml(option.key) + "</span>";
+          html += "    <div><h4>" + escapeHtml(option.name) + "</h4><p>" + escapeHtml(option.subtitle) + "</p></div>";
+          html += "  </div>";
+          html += "  <div class='rfj-option-main'>";
+          html += "    <div class='rfj-option-image rfj-has-img'><img src='" + escapeHtml(option.imagePath) + "' alt='" + escapeHtml(option.imageAlt || option.name) + "' loading='lazy'></div>";
+          html += "    <div class='rfj-kpi-stack'>";
+          html += "      <div class='rfj-load-box'><span>zGG neu</span><strong>" + escapeHtml(kg(target.zgg)) + "</strong></div>";
+          html += "      <div class='rfj-load-box'><span>VA max.</span><strong>" + escapeHtml(kg(target.va)) + "</strong></div>";
+          html += "      <div class='rfj-load-box'><span>HA max.</span><strong>" + escapeHtml(kg(target.ha)) + "</strong></div>";
+          html += "    </div>";
+          html += "    <div class='rfj-price-box'>";
+          html += "      <span>Aktueller Preis</span>";
+          html += "      <strong>" + escapeHtml(optionPrice) + "</strong>";
+          html += "      <p>" + escapeHtml(AUFLASTUNG_CONFIG.priceNotes[option.key] || "Preis zentral im Code anpassbar.") + "</p>";
+          html += "      <ul>" + (AUFLASTUNG_CONFIG.priceIncludes[option.key] || []).map(function (item) { return "<li>" + escapeHtml(item) + "</li>"; }).join("") + "</ul>";
+          html += "    </div>";
+          html += "  </div>";
+          html += "  <div class='rfj-procon-full'>";
+          html += "    <div class='rfj-procon-box'><h5>Vorteile</h5><ul>" + option.pros.map(function (item) { return "<li>" + escapeHtml(item) + "</li>"; }).join("") + "</ul></div>";
+          html += "    <div class='rfj-procon-box'><h5>Zu beachten</h5><ul>" + option.cons.map(function (item) { return "<li>" + escapeHtml(item) + "</li>"; }).join("") + "</ul></div>";
+          html += "  </div>";
+          html += "  <div class='rfj-wheel-note'><strong>Räder/Reifen:</strong> Für die angezeigten Traglasten müssen Felgen und Reifen die entsprechende Tragkraft haben. ramto kann passende Fiat-Räder/Felgen prüfen und anbieten. <a href='" + escapeHtml(AUFLASTUNG_CONFIG.wheelUrl) + "' target='_blank' rel='noopener'>Fiat-Felgen ansehen.</a></div>";
+          html += "  <div class='rfj-option-actions'>";
+          html += "    <a class='rfj-button rfj-button-primary' data-track='product' data-option='" + escapeHtml(option.key) + "' href='" + escapeHtml(productUrl) + "' target='_blank' rel='noopener'>Zur Produktseite</a>";
+          html += renderContactActions("option", option, null);
+          html += "  </div>";
+          html += "</article>";
+        });
+
+        html += "</div>";
+        html += "<div class='rfj-summary-list'>";
+        html += "  <strong>Ihre Eingaben:</strong> zGG " + escapeHtml(kg(state.zgg)) + " · 1-VA " + escapeHtml(kg(state.va)) + " · 2-HA " + escapeHtml(kg(state.ha)) + ".";
+        html += "  <span>Die finale technische Prüfung, die passende Rad-/Reifenkombination und die Abnahme stimmen wir individuell mit Ihnen ab.</span>";
+        html += "</div>";
+        html += "<div class='rfj-option-actions' style='padding:18px 0 0'><button type='button' class='rfj-button' data-restart>Neu starten</button></div>";
+
+        results.hidden = false;
+        results.innerHTML = html;
+        trackEvent("results_shown", trackingBase(null, row));
+        updateProgress();
+        safeScrollTo(results);
+      }
+
+      function resetJourney() {
+        state.leaf = null;
+        state.zgg = null;
+        state.va = null;
+        state.ha = null;
+        results.hidden = true;
+        results.innerHTML = "";
+        currentStep = 0;
+        renderCurrentChoices();
+        updateProgress();
+        scrollToForm();
+      }
+
+      function closestMatch(element, selector) {
+        while (element && element !== root) {
+          if (element.matches && element.matches(selector)) return element;
+          element = element.parentNode;
+        }
+        return null;
+      }
+
+      function processSelect(target) {
+        if (!target || !target.id) return false;
+
+        if (target.id === "rfj-leaf-select") {
+          if (!target.value) {
+            showError(0, "Bitte wählen Sie eine Antwort aus.");
+            return false;
+          }
+          state.leaf = target.value === "yes";
+          trackEvent(state.leaf ? "leaf_yes" : "leaf_no", { leaf_spring: state.leaf ? "yes" : "no" });
+          state.zgg = null;
+          state.va = null;
+          state.ha = null;
+          if (!state.leaf) {
+            renderCurrentChoices();
+            renderNoLeaf();
+            return true;
+          }
+          goTo(1);
+          return true;
+        }
+
+        if (target.id === "rfj-zgg-select") {
+          if (!target.value) {
+            showError(1, "Bitte wählen Sie ein zGG aus.");
+            return false;
+          }
+          state.zgg = parseInt(target.value, 10);
+          trackEvent("selected_zgg", { current_zgg: state.zgg });
+          state.va = null;
+          state.ha = null;
+          goTo(2);
+          return true;
+        }
+
+        if (target.id === "rfj-va-select") {
+          if (!target.value) {
+            showError(2, "Bitte wählen Sie die 1-VA aus.");
+            return false;
+          }
+          state.va = parseInt(target.value, 10);
+          trackEvent("selected_va", { current_zgg: state.zgg, current_va: state.va });
+          state.ha = null;
+          goTo(3);
+          return true;
+        }
+
+        if (target.id === "rfj-ha-select") {
+          if (!target.value) {
+            showError(3, "Bitte wählen Sie die 2-HA aus.");
+            return false;
+          }
+          state.ha = parseInt(target.value, 10);
+          trackEvent("selected_ha", { current_zgg: state.zgg, current_va: state.va, current_ha: state.ha });
+          renderCurrentChoices();
+          renderResults();
+          return true;
+        }
+
+        return false;
+      }
+
+      root.addEventListener("click", function (event) {
+        var target = event.target || event.srcElement;
+        var restartButton = closestMatch(target, "[data-restart]");
+        if (restartButton) {
+          resetJourney();
+          return;
+        }
+
+        var closeModalButton = closestMatch(target, "[data-close-modal]");
+        if (closeModalButton) {
+          closeContactForm();
+          return;
+        }
+
+        var contactButton = closestMatch(target, "[data-contact-channel]");
+        if (contactButton) {
+          event.preventDefault();
+          handleContactClick(contactButton);
+          return;
+        }
+
+        var trackedLink = closestMatch(target, "[data-track]");
+        if (trackedLink) {
+          var trackType = trackedLink.getAttribute("data-track");
+          var optionKey = trackedLink.getAttribute("data-option");
+          var option = OPTIONEN.filter(function (item) { return item.key === optionKey; })[0] || null;
+          var row = selectedRow();
+          if (trackType === "product") {
+            trackEvent("product_button_clicked", trackingBase(option, row));
+          } else if (trackType === "mail") {
+            trackEvent("email_button_clicked", trackingBase(option, row));
+          } else if (trackType === "mail-no-leaf") {
+            trackEvent("email_button_clicked", { option: "no_leaf", leaf_spring: "no_or_unsure" });
+          }
+          return;
+        }
+
+        var continueButton = closestMatch(target, "[data-continue]");
+        if (continueButton) {
+          var key = continueButton.getAttribute("data-continue");
+          var selectMap = { leaf: leafSelect, zgg: zggSelect, va: vaSelect, ha: haSelect };
+          processSelect(selectMap[key]);
+        }
+      });
+
+      root.addEventListener("change", function (event) {
+        processSelect(event.target || event.srcElement);
+      });
+
+      root.addEventListener("input", function (event) {
+        processSelect(event.target || event.srcElement);
+      });
+
+      prevButton.addEventListener("click", function () {
+        if (currentStep > 0) {
+          results.hidden = true;
+          results.innerHTML = "";
+          currentStep -= 1;
+          renderCurrentChoices();
+          updateProgress();
+          scrollToForm();
+        }
+      });
+
+      resetButton.addEventListener("click", resetJourney);
+
+      form.addEventListener("submit", function (event) {
+        event.preventDefault();
+      });
+
+      if (contactForm) {
+        contactForm.addEventListener("submit", function (event) {
+          event.preventDefault();
+          if (!activeFormInquiry) return;
+
+          var extra = readFormExtra();
+          extra.customerName = extra.customerName.replace(/^\s+|\s+$/g, "");
+          extra.customerPhone = extra.customerPhone.replace(/^\s+|\s+$/g, "");
+          extra.customerEmail = extra.customerEmail.replace(/^\s+|\s+$/g, "");
+          extra.customerMessage = extra.customerMessage.replace(/^\s+|\s+$/g, "");
+          extra.stepIndex = activeFormInquiry.stepIndex;
+
+          var consent = root.querySelector("#rfj-contact-consent");
+          if (!extra.customerName) {
+            setFormStatus("Bitte geben Sie Ihren Namen ein.", true);
+            return;
+          }
+          if (!extra.customerPhone && !extra.customerEmail) {
+            setFormStatus("Bitte geben Sie mindestens eine Telefonnummer oder eine E-Mail-Adresse ein.", true);
+            return;
+          }
+          if (consent && !consent.checked) {
+            setFormStatus("Bitte bestätigen Sie, dass ramto Ihre Angaben zur Bearbeitung nutzen darf.", true);
+            return;
+          }
+          if (!AUFLASTUNG_CONFIG.sheetEndpoint) {
+            setFormStatus("Das Formular ist technisch noch nicht verbunden. Bitte zuerst AUFLASTUNG_CONFIG.sheetEndpoint eintragen oder E-Mail/WhatsApp nutzen.", true);
+            return;
+          }
+
+          var option = optionByKey(activeFormInquiry.optionKey);
+          var row = selectedRow();
+
+          if (contactSubmit) contactSubmit.disabled = true;
+          setFormStatus("Ihre Anfrage wird vorbereitet ...", false);
+
+          readSelectedPhotos().then(function (photos) {
+            extra.photos = photos;
+            var payload = buildInquiryPayload("formular", activeFormInquiry.inquiryType, option, row, extra);
+            setFormStatus("Ihre Anfrage wird übertragen ...", false);
+            return saveInquiry(payload);
+          }).then(function (ok) {
+            if (contactSubmit) contactSubmit.disabled = false;
+            if (!ok) {
+              setFormStatus("Die Anfrage konnte nicht übertragen werden. Bitte versuchen Sie es erneut oder nutzen Sie E-Mail/WhatsApp.", true);
+              return;
+            }
+            trackEvent("form_submitted", trackingBase(option, row));
+            setFormStatus("Vielen Dank. Ihre Anfrage wurde übermittelt.", false);
+            showNotice("Formularanfrage wurde gespeichert und an ramto übermittelt.");
+            window.setTimeout(closeContactForm, 1400);
+          }).catch(function (error) {
+            if (contactSubmit) contactSubmit.disabled = false;
+            setFormStatus(error && error.message ? error.message : "Die Fotos oder die Anfrage konnten nicht verarbeitet werden.", true);
+          });
+        });
+      }
+
+      document.addEventListener("keydown", function (event) {
+        if (event.key === "Escape" && contactModal && !contactModal.hidden) closeContactForm();
+      });
+
+      trackEvent("configurator_started", {});
+      renderHelpCards();
+      renderCurrentChoices();
+      updateProgress();
+    })();
+  </script>
+</div>
+
+<!-- JIMDO-CODE ENDE -->
 </body>
 </html>
