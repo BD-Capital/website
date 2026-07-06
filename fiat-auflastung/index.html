@@ -10,7 +10,7 @@
 <!-- JIMDO-CODE START -->
 <!--
   ramto Fiat Ducato Auflastungs-Check
-  Version: 6.1
+  Version: 6.2
   Stand: 06.07.2026
   Einbau in Jimdo: Bei der Jimdo-Block-Datei alles kopieren. Bei der Vollversion nur den Bereich zwischen JIMDO-CODE START und JIMDO-CODE ENDE kopieren.
 
@@ -1920,6 +1920,7 @@
 
       function requestTitle(inquiryType, option, stepIndex) {
         if (inquiryType === "option" && option) return "Option " + option.key + ": " + option.name;
+        if (inquiryType === "product_click" && option) return "Produktseiten-Klick - Option " + option.key + ": " + option.name;
         if (inquiryType === "no_leaf") return "Blattfederung nein / unsicher";
         if (inquiryType === "help") return "Persönliche Beratung" + (stepNameByIndex(stepIndex) ? " – " + stepNameByIndex(stepIndex) : "");
         return "Persönliche Beratung";
@@ -2007,7 +2008,7 @@
         var target = option ? targetValues(row, option) : { zgg: null, va: null, ha: null };
         return {
           writeToken: AUFLASTUNG_CONFIG.sheetWriteToken || "",
-          toolVersion: "6.1",
+          toolVersion: "6.2",
           timestampClient: new Date().toISOString(),
           sourcePage: window.location.href,
           pageTitle: document.title || "",
@@ -2473,6 +2474,7 @@
           var row = selectedRow();
           if (trackType === "product") {
             trackEvent("product_button_clicked", trackingBase(option, row));
+            saveInquiry(buildInquiryPayload("produktseite", "product_click", option, row, {}));
           } else if (trackType === "mail") {
             trackEvent("email_button_clicked", trackingBase(option, row));
           } else if (trackType === "mail-no-leaf") {
