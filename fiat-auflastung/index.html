@@ -10,7 +10,7 @@
 <!-- JIMDO-CODE START -->
 <!--
   ramto Fiat Ducato Auflastungs-Check
-  Version: 6.0
+  Version: 6.1
   Stand: 06.07.2026
   Einbau in Jimdo: Bei der Jimdo-Block-Datei alles kopieren. Bei der Vollversion nur den Bereich zwischen JIMDO-CODE START und JIMDO-CODE ENDE kopieren.
 
@@ -1432,16 +1432,17 @@
             <input id="rfj-contact-phone" class="rfj-input" type="tel" name="phone" autocomplete="tel">
           </label>
           <label class="rfj-field">
-            <span>E-Mail optional</span>
+            <span>E-Mail</span>
             <input id="rfj-contact-email" class="rfj-input" type="email" name="email" autocomplete="email">
           </label>
-          <label class="rfj-field">
-            <span>Adresse</span>
-            <input id="rfj-contact-address" class="rfj-input" type="text" name="address" autocomplete="street-address">
+          <label class="rfj-field rfj-field-full">
+            <span>Fotos hochladen optional</span>
+            <input id="rfj-contact-photos" class="rfj-input" type="file" name="photos" accept="image/*" multiple>
+            <small>Optional: Fotos von Fahrzeugschein, Typenschild oder Hinterachse. Maximal 5 MB pro Foto, maximal 12 MB gesamt.</small>
           </label>
           <label class="rfj-field rfj-field-full">
             <span>Nachricht / Rückrufwunsch</span>
-            <textarea id="rfj-contact-message" class="rfj-textarea" name="message" rows="4"></textarea>
+            <textarea id="rfj-contact-message" class="rfj-textarea" name="message" rows="8"></textarea>
           </label>
         </div>
         <label class="rfj-consent">
@@ -1451,7 +1452,7 @@
         <div id="rfj-contact-status" class="rfj-form-status" aria-live="polite"></div>
         <div class="rfj-modal-actions">
           <button type="button" class="rfj-button" data-close-modal>Abbrechen</button>
-          <button type="submit" id="rfj-contact-submit" class="rfj-button rfj-button-primary">Formular senden</button>
+          <button type="submit" id="rfj-contact-submit" class="rfj-button rfj-button-dark">Anfrage senden</button>
         </div>
       </form>
     </div>
@@ -1473,11 +1474,11 @@
 
         // Muss identisch mit WRITE_TOKEN im Apps Script sein. Kein echter Geheimschutz,
         // weil der Wert im Frontend sichtbar ist, aber gut gegen einfache Fremdposts/Bots.
-        sheetWriteToken: "ramtoAuflastungsAnfragenWriteToken",
+        sheetWriteToken: "HIER_TOKEN_EINTRAGEN",
 
         // WhatsApp im internationalen Format, nur Ziffern, ohne +, Leerzeichen oder Klammern.
         // Beispiel: 491701234567. Leer lassen = WhatsApp-Button zeigt Formular-Fallback.
-        whatsappPhone: "+4917685649974",
+        whatsappPhone: "",
         wheelUrl: "https://www.ramto.de/r%C3%A4der-u-felgen/fiatalle/",
         productUrls: {
           A: "https://www.ramto.de/fahrwerk/#cc-m-product-10205992150",
@@ -1909,7 +1910,7 @@
           "Aktuelles zGG: " + stateLabel(state.zgg),
           "Aktuelle Vorderachslast 1-VA: " + stateLabel(state.va),
           "Aktuelle Hinterachslast 2-HA: " + stateLabel(state.ha),
-          "Tabellenprofil: " + (row ? (row.chassis + " / Typ " + row.typ) : "Bitte prüfen")
+          "Tabellenprofil: " + (row ? (row.chassis + " / Typ " + row.typ) : "nicht eindeutig erkannt - bitte manuell prüfen")
         ];
       }
 
@@ -1989,12 +1990,11 @@
           ]);
         }
 
-        if (extra.customerName || extra.customerPhone || extra.customerEmail || extra.customerAddress || extra.customerMessage) {
+        if (extra.customerName || extra.customerPhone || extra.customerEmail || extra.customerMessage) {
           lines = lines.concat(["", "Kontaktdaten aus dem Formular:"]);
           if (extra.customerName) lines.push("Name: " + extra.customerName);
           if (extra.customerPhone) lines.push("Telefon: " + extra.customerPhone);
           if (extra.customerEmail) lines.push("E-Mail: " + extra.customerEmail);
-          if (extra.customerAddress) lines.push("Adresse: " + extra.customerAddress);
           if (extra.customerMessage) lines.push("Nachricht: " + extra.customerMessage);
         }
 
@@ -2007,7 +2007,7 @@
         var target = option ? targetValues(row, option) : { zgg: null, va: null, ha: null };
         return {
           writeToken: AUFLASTUNG_CONFIG.sheetWriteToken || "",
-          toolVersion: "6.0",
+          toolVersion: "6.1",
           timestampClient: new Date().toISOString(),
           sourcePage: window.location.href,
           pageTitle: document.title || "",
@@ -2031,9 +2031,9 @@
           customerName: extra.customerName || "",
           customerPhone: extra.customerPhone || "",
           customerEmail: extra.customerEmail || "",
-          customerAddress: extra.customerAddress || "",
           customerMessage: extra.customerMessage || "",
           honeypot: extra.honeypot || "",
+          photos: extra.photos || [],
           messageText: buildMessage(inquiryType, option, row, extra)
         };
       }
@@ -2091,9 +2091,9 @@
       function renderContactActions(inquiryType, option, stepIndex) {
         var optionAttr = option ? " data-option='" + escapeHtml(option.key) + "'" : "";
         var stepAttr = stepIndex !== undefined && stepIndex !== null ? " data-help-step='" + escapeHtml(stepIndex) + "'" : "";
-        return "<button type='button' class='rfj-button rfj-button-primary rfj-contact-button' data-contact-channel='email' data-contact-type='" + escapeHtml(inquiryType) + "'" + optionAttr + stepAttr + ">Per E-Mail</button>" +
-          "<button type='button' class='rfj-button rfj-button-dark rfj-contact-button' data-contact-channel='whatsapp' data-contact-type='" + escapeHtml(inquiryType) + "'" + optionAttr + stepAttr + ">Per WhatsApp</button>" +
-          "<button type='button' class='rfj-button rfj-button-ghost rfj-contact-button' data-contact-channel='formular' data-contact-type='" + escapeHtml(inquiryType) + "'" + optionAttr + stepAttr + ">Per Formular</button>";
+        return "<button type='button' class='rfj-button rfj-button-dark rfj-contact-button' data-contact-channel='email' data-contact-type='" + escapeHtml(inquiryType) + "'" + optionAttr + stepAttr + ">Anfrage (per E-Mail)</button>" +
+          "<button type='button' class='rfj-button rfj-button-dark rfj-contact-button' data-contact-channel='whatsapp' data-contact-type='" + escapeHtml(inquiryType) + "'" + optionAttr + stepAttr + ">Anfrage (per WhatsApp)</button>" +
+          "<button type='button' class='rfj-button rfj-button-dark rfj-contact-button' data-contact-channel='formular' data-contact-type='" + escapeHtml(inquiryType) + "'" + optionAttr + stepAttr + ">Anfrage (per Formular)</button>";
       }
 
       function renderHelpCards() {
@@ -2149,10 +2149,12 @@
         };
 
         contactTitle.textContent = inquiryType === "option" && option ? "Anfrage per Formular – Option " + option.key : "Anfrage per Formular";
-        contactIntro.textContent = "Tragen Sie bitte mindestens Ihren Namen und eine Telefonnummer oder Adresse ein. Ihre bisherigen Angaben aus dem Auflastungs-Check werden automatisch mitgesendet.";
+        contactIntro.textContent = "Tragen Sie bitte mindestens Ihren Namen und eine Telefonnummer oder E-Mail-Adresse ein. Ihre bisherigen Angaben aus dem Auflastungs-Check werden automatisch mitgesendet.";
         contactSummary.innerHTML = modalSummaryHtml(inquiryType, option, row, stepIndex);
         setFormStatus("", false);
         contactForm.reset();
+        var messageField = root.querySelector("#rfj-contact-message");
+        if (messageField) messageField.value = buildMessage(inquiryType, option, row, { stepIndex: stepIndex });
         contactModal.hidden = false;
         contactModal.setAttribute("aria-hidden", "false");
         window.setTimeout(function () {
@@ -2169,14 +2171,50 @@
         setFormStatus("", false);
       }
 
+      function readSelectedPhotos() {
+        var input = root.querySelector("#rfj-contact-photos");
+        var files = input && input.files ? Array.prototype.slice.call(input.files) : [];
+        var maxPerFile = 5 * 1024 * 1024;
+        var maxTotal = 12 * 1024 * 1024;
+        var total = 0;
+
+        for (var i = 0; i < files.length; i += 1) {
+          total += files[i].size || 0;
+          if ((files[i].size || 0) > maxPerFile) {
+            return Promise.reject(new Error("Ein Foto ist größer als 5 MB. Bitte verkleinern oder weniger Fotos auswählen."));
+          }
+        }
+        if (total > maxTotal) {
+          return Promise.reject(new Error("Die Fotos sind zusammen größer als 12 MB. Bitte weniger Fotos auswählen."));
+        }
+
+        return Promise.all(files.map(function (file) {
+          return new Promise(function (resolve, reject) {
+            var reader = new FileReader();
+            reader.onload = function () {
+              var result = String(reader.result || "");
+              var commaIndex = result.indexOf(",");
+              resolve({
+                name: file.name || "foto.jpg",
+                type: file.type || "application/octet-stream",
+                size: file.size || 0,
+                data: commaIndex >= 0 ? result.slice(commaIndex + 1) : result
+              });
+            };
+            reader.onerror = function () { reject(new Error("Foto konnte nicht gelesen werden.")); };
+            reader.readAsDataURL(file);
+          });
+        }));
+      }
+
       function readFormExtra() {
         return {
           customerName: (root.querySelector("#rfj-contact-name") || {}).value || "",
           customerPhone: (root.querySelector("#rfj-contact-phone") || {}).value || "",
           customerEmail: (root.querySelector("#rfj-contact-email") || {}).value || "",
-          customerAddress: (root.querySelector("#rfj-contact-address") || {}).value || "",
           customerMessage: (root.querySelector("#rfj-contact-message") || {}).value || "",
-          honeypot: (root.querySelector("#rfj-contact-hp") || {}).value || ""
+          honeypot: (root.querySelector("#rfj-contact-hp") || {}).value || "",
+          photos: []
         };
       }
 
@@ -2238,7 +2276,7 @@
         var html = "";
         html += "<div class='rfj-result-head'>";
         html += "  <div>";
-        html += "    <h3>Über diese Journey leider keine passende Auflastung</h3>";
+        html += "    <h3>Leider keine passende Auflastung</h3>";
         html += "    <p>Diese Berechnung ist für Fahrzeuge mit blattgefederter Hinterachse ausgelegt. Ohne Blattfederung kann hier kein konkretes Auflastungsangebot berechnet werden.</p>";
         html += "  </div>";
         html += "  <span class='rfj-pill'>Blattfederung: Nein / unsicher</span>";
@@ -2301,9 +2339,9 @@
           html += "    <div class='rfj-procon-box'><h5>Vorteile</h5><ul>" + option.pros.map(function (item) { return "<li>" + escapeHtml(item) + "</li>"; }).join("") + "</ul></div>";
           html += "    <div class='rfj-procon-box'><h5>Zu beachten</h5><ul>" + option.cons.map(function (item) { return "<li>" + escapeHtml(item) + "</li>"; }).join("") + "</ul></div>";
           html += "  </div>";
-          html += "  <div class='rfj-wheel-note'><strong>Räder/Reifen:</strong> Für die angezeigten Traglasten müssen Felgen und Reifen die entsprechende Tragkraft haben. ramto kann passende Fiat-Räder/Felgen prüfen und anbieten.</div>";
+          html += "  <div class='rfj-wheel-note'><strong>Räder/Reifen:</strong> Für die angezeigten Traglasten müssen Felgen und Reifen die entsprechende Tragkraft haben. ramto kann passende Fiat-Räder/Felgen prüfen und anbieten. <a href='" + escapeHtml(AUFLASTUNG_CONFIG.wheelUrl) + "' target='_blank' rel='noopener'>Fiat-Felgen ansehen.</a></div>";
           html += "  <div class='rfj-option-actions'>";
-          html += "    <a class='rfj-button rfj-button-dark' data-track='product' data-option='" + escapeHtml(option.key) + "' href='" + escapeHtml(productUrl) + "' target='_blank' rel='noopener'>Zur Produktseite</a>";
+          html += "    <a class='rfj-button rfj-button-primary' data-track='product' data-option='" + escapeHtml(option.key) + "' href='" + escapeHtml(productUrl) + "' target='_blank' rel='noopener'>Zur Produktseite</a>";
           html += renderContactActions("option", option, null);
           html += "  </div>";
           html += "</article>";
@@ -2485,7 +2523,6 @@
           extra.customerName = extra.customerName.replace(/^\s+|\s+$/g, "");
           extra.customerPhone = extra.customerPhone.replace(/^\s+|\s+$/g, "");
           extra.customerEmail = extra.customerEmail.replace(/^\s+|\s+$/g, "");
-          extra.customerAddress = extra.customerAddress.replace(/^\s+|\s+$/g, "");
           extra.customerMessage = extra.customerMessage.replace(/^\s+|\s+$/g, "");
           extra.stepIndex = activeFormInquiry.stepIndex;
 
@@ -2494,8 +2531,8 @@
             setFormStatus("Bitte geben Sie Ihren Namen ein.", true);
             return;
           }
-          if (!extra.customerPhone && !extra.customerAddress) {
-            setFormStatus("Bitte geben Sie mindestens eine Telefonnummer oder eine Adresse ein.", true);
+          if (!extra.customerPhone && !extra.customerEmail) {
+            setFormStatus("Bitte geben Sie mindestens eine Telefonnummer oder eine E-Mail-Adresse ein.", true);
             return;
           }
           if (consent && !consent.checked) {
@@ -2509,12 +2546,16 @@
 
           var option = optionByKey(activeFormInquiry.optionKey);
           var row = selectedRow();
-          var payload = buildInquiryPayload("formular", activeFormInquiry.inquiryType, option, row, extra);
 
           if (contactSubmit) contactSubmit.disabled = true;
-          setFormStatus("Ihre Anfrage wird übertragen ...", false);
+          setFormStatus("Ihre Anfrage wird vorbereitet ...", false);
 
-          saveInquiry(payload).then(function (ok) {
+          readSelectedPhotos().then(function (photos) {
+            extra.photos = photos;
+            var payload = buildInquiryPayload("formular", activeFormInquiry.inquiryType, option, row, extra);
+            setFormStatus("Ihre Anfrage wird übertragen ...", false);
+            return saveInquiry(payload);
+          }).then(function (ok) {
             if (contactSubmit) contactSubmit.disabled = false;
             if (!ok) {
               setFormStatus("Die Anfrage konnte nicht übertragen werden. Bitte versuchen Sie es erneut oder nutzen Sie E-Mail/WhatsApp.", true);
@@ -2524,6 +2565,9 @@
             setFormStatus("Vielen Dank. Ihre Anfrage wurde übermittelt.", false);
             showNotice("Formularanfrage wurde gespeichert und an ramto übermittelt.");
             window.setTimeout(closeContactForm, 1400);
+          }).catch(function (error) {
+            if (contactSubmit) contactSubmit.disabled = false;
+            setFormStatus(error && error.message ? error.message : "Die Fotos oder die Anfrage konnten nicht verarbeitet werden.", true);
           });
         });
       }
