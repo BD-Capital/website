@@ -11,7 +11,7 @@
 <!--
   ramto Fiat Ducato Auflastungs-Check
   Version: 6.6 Clean Logging
-  Stand: 06.07.2026
+  Stand: 07.07.2026
   Einbau in Jimdo: Bei der Jimdo-Block-Datei alles kopieren. Bei der Vollversion nur den Bereich zwischen JIMDO-CODE START und JIMDO-CODE ENDE kopieren.
 
   Wichtige Anpassungsstellen:
@@ -2059,17 +2059,20 @@
             method: "POST",
             mode: "no-cors",
             cache: "no-cache",
-            keepalive: true,
             headers: { "Content-Type": "text/plain;charset=UTF-8" },
             body: body
           }).then(function () {
             return true;
           }).catch(function () {
-            if (navigator.sendBeacon) {
-              try {
-                var blob = new Blob([body], { type: "text/plain;charset=UTF-8" });
-                return navigator.sendBeacon(endpoint, blob);
-              } catch (error) {}
+            // sendBeacon ist nur fuer kleine Text-Requests geeignet.
+            // Foto-Uploads per Base64 sind dafuer zu gross und wuerden im Browser abgelehnt.
+            if (!payload.photos || !payload.photos.length) {
+              if (navigator.sendBeacon) {
+                try {
+                  var blob = new Blob([body], { type: "text/plain;charset=UTF-8" });
+                  return navigator.sendBeacon(endpoint, blob);
+                } catch (error) {}
+              }
             }
             return false;
           });
