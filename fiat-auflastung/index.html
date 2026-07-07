@@ -2572,6 +2572,8 @@
             var logExtra = Object.assign({}, extra, { photos: [] });
             var logPayload = buildInquiryPayload("formular", activeFormInquiry.inquiryType, option, row, logExtra);
             logPayload.requestId = requestId;
+            logPayload.deferMailUntilPhotos = photos.length > 0;
+            logPayload.photoCountExpected = photos.length;
 
             setFormStatus("Ihre Anfrage wird übertragen ...", false);
             return saveInquiry(logPayload, true).then(function (ok) {
@@ -2580,9 +2582,9 @@
               if (!photos.length) return true;
 
               setFormStatus("Ihre Anfrage wurde gespeichert. Fotos werden hochgeladen ...", false);
-              var photoPayload = buildInquiryPayload("foto_upload", "photo_upload", option, row, Object.assign({}, extra, { photos: photos }));
+              var photoPayload = buildInquiryPayload("foto_upload", activeFormInquiry.inquiryType, option, row, Object.assign({}, extra, { photos: photos }));
               photoPayload.requestId = requestId;
-              photoPayload.requestTitle = "Foto-Upload zur Anfrage " + requestId;
+              photoPayload.sendFormMailAfterPhotoUpload = true;
               photoPayload.messageText = "";
               return saveInquiry(photoPayload, false);
             });
