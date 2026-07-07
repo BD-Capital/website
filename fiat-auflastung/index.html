@@ -1470,7 +1470,7 @@
         // 1) Apps-Script-Code aus der separaten Datei in ein Google Sheet einfügen.
         // 2) Als Web-App bereitstellen.
         // 3) Die Web-App-URL hier eintragen.
-        sheetEndpoint: "https://script.google.com/macros/s/AKfycbz-S3p0G2FO-5BOtzb9HyAzvR8FG6WhDxubsSb2-VYnxW7bk1nsnDdsaSqmFQdzJjKr/exec",
+        sheetEndpoint: "https://script.google.com/macros/s/AKfycbyeTfL7NBgbqaSTi2EEhUP8BvyDGGPMUQwfqnWhhc5Yrwl9aJXSIgjQmjw5ATejuV8s/exec",
 
         // Muss identisch mit WRITE_TOKEN im Apps Script sein. Kein echter Geheimschutz,
         // weil der Wert im Frontend sichtbar ist, aber gut gegen einfache Fremdposts/Bots.
@@ -2558,11 +2558,15 @@
           if (contactSubmit) contactSubmit.disabled = true;
           setFormStatus("Ihre Anfrage wird vorbereitet ...", false);
 
-          extra.photos = [];
-          var payload = buildInquiryPayload("formular", activeFormInquiry.inquiryType, option, row, extra);
+          setFormStatus("Fotos werden vorbereitet ...", false);
 
-          setFormStatus("Ihre Anfrage wird übertragen ...", false);
-          saveInquiry(payload).then(function (ok) {
+          readSelectedPhotos().then(function (photos) {
+            extra.photos = photos || [];
+            var payload = buildInquiryPayload("formular", activeFormInquiry.inquiryType, option, row, extra);
+
+            setFormStatus("Ihre Anfrage wird übertragen ...", false);
+            return saveInquiry(payload);
+          }).then(function (ok) {
             if (contactSubmit) contactSubmit.disabled = false;
             if (!ok) {
               setFormStatus("Die Anfrage konnte nicht übertragen werden. Bitte versuchen Sie es erneut oder nutzen Sie E-Mail/WhatsApp.", true);
