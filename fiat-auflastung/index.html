@@ -2039,7 +2039,7 @@
         };
       }
 
-      function saveInquiry(payload) {
+      function saveInquiry(payload, forceKeepalive) {
         var endpoint = AUFLASTUNG_CONFIG.sheetEndpoint || "";
         if (!endpoint) {
           if (window.console && console.warn) console.warn("ramto Auflastungs-Check: sheetEndpoint ist nicht konfiguriert.");
@@ -2060,7 +2060,8 @@
             mode: "no-cors",
             cache: "no-cache",
             headers: { "Content-Type": "text/plain;charset=UTF-8" },
-            body: body
+            body: body,
+            keepalive: Boolean(forceKeepalive) && body.length < 60000
           }).then(function () {
             return true;
           }).catch(function () {
@@ -2563,12 +2564,28 @@
 
           setFormStatus("Fotos werden vorbereitet ...", false);
 
+          var requestId = "rfj-" + Date.now() + "-" + Math.floor(Math.random() * 100000);
+
           readSelectedPhotos().then(function (photos) {
-            extra.photos = photos || [];
-            var payload = buildInquiryPayload("formular", activeFormInquiry.inquiryType, option, row, extra);
+            photos = photos || [];
+
+            var logExtra = Object.assign({}, extra, { photos: [] });
+            var logPayload = buildInquiryPayload("formular", activeFormInquiry.inquiryType, option, row, logExtra);
+            logPayload.requestId = requestId;
 
             setFormStatus("Ihre Anfrage wird übertragen ...", false);
-            return saveInquiry(payload);
+            return saveInquiry(logPayload, true).then(function (ok) {
+              if (!ok) return false;
+
+              if (!photos.length) return true;
+
+              setFormStatus("Ihre Anfrage wurde gespeichert. Fotos werden hochgeladen ...", false);
+              var photoPayload = buildInquiryPayload("foto_upload", "photo_upload", option, row, Object.assign({}, extra, { photos: photos }));
+              photoPayload.requestId = requestId;
+              photoPayload.requestTitle = "Foto-Upload zur Anfrage " + requestId;
+              photoPayload.messageText = "";
+              return saveInquiry(photoPayload, false);
+            });
           }).then(function (ok) {
             if (contactSubmit) contactSubmit.disabled = false;
             if (!ok) {
@@ -2577,7 +2594,7 @@
             }
             trackEvent("form_submitted", trackingBase(option, row));
             setFormStatus("Vielen Dank. Ihre Anfrage wurde abgeschickt.", false);
-            showNotice("Formularanfrage wurde an ramto übertragen.");
+            showNotice("Formularanfrage wurde an ramto übertragen. Fotos werden, falls vorhanden, der Anfrage zugeordnet.");
             window.setTimeout(closeContactForm, 1400);
           }).catch(function (error) {
             if (contactSubmit) contactSubmit.disabled = false;
